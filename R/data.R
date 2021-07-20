@@ -1,47 +1,83 @@
-#' @title Cucurbita occurrences dataset
-#' @name CucurbitaData
+#' @title A thaliana functional enrichment analysis results for "AID","DCE","RCD","SPS" cancer-hallmarks
+#' @name A_thaliana_compress
 #' @docType data
-#' @description This dataset is a subset of the original dataset for:
-#'  C. cordata, C. digitata and C. palmata used in Khoury et al. (2019)
-#' @format A data frame with 1184 rows and 4 variables:
+#' @description This dataset is a subset of the original dataset obtained for Clavijo-Buriticá (In preparation)
+#' @format A data frame with 2000 rows and 6 variables:
 #' \describe{
-#'   \item{species}{character: Species name}
-#'   \item{latitude}{numeric:Latitude in decimal format}
-#'   \item{longitude}{numeric: Longitude in decimal format}
-#'   \item{type}{character: Source of the record,germplasm (G) or herbarium (H)}
+#'   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
+#'   \item{Genes_in_list}{numeric: Number of genes in the list of genes for a given GO term}
+#'   \item{Total_genes}{numeric: Number of genes in the genome of a species for a given GO term}
+#'   \item{Functional_Category}{character: GO term name or GO term id}
+#'   \item{Genes}{character: Genes found fot a given GO term}
+#'   \item{feature}{character: A column representing the belonging of a group of comparison}
 #' }
 #' @references
-#' Khoury et al. (2019) Plants, People, Planet 2(3):269-283. doi: 10.1002/ppp3.10085.
-#' @source \url{https://dataverse.harvard.edu/dataverse/GapAnalysis}
-"CucurbitaData"
+#' Clavijo-Buriticá, Sosa, C.C., Mosquera, A.J. Álvarez, A., Medina, J. Quimbaya,
+#' M.A. A systematic comparison of the molecular machinery associated with Cancer-Hallmarks
+#' between plants and humans reveals Arabidopsis thaliana as a useful model to understand
+#' specific carcinogenic events (to be submitted, Target journal: Plos Biology)
+#' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
+"A_thaliana_compress"
 
-#' @title Cucurbita species distribution models dataset
-#' @name CucurbitaRasters
+#' @title H. sapiens functional enrichment analysis results for "AID","DCE","RCD","SPS" cancer-hallmarks
+#' @name H_sapiens_compress
 #' @docType data
-#' @format raster files
-#' @description This dataset is a subset of species distribution models for:
-#'  C. cordata, C. digitata and C. palmata used in Khoury et al., 2020
+#' @description This dataset is a subset of the original dataset obtained for Clavijo-Buriticá (In preparation)
+#' @format A data frame with 2000 rows and 6 variables:
+#' \describe{
+#'   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
+#'   \item{Genes_in_list}{numeric: Number of genes in the list of genes for a given GO term}
+#'   \item{Total_genes}{numeric: Number of genes in the genome of a species for a given GO term}
+#'   \item{Functional_Category}{character: GO term name or GO term id}
+#'   \item{Genes}{character: Genes found fot a given GO term}
+#'   \item{feature}{character: A column representing the belonging of a group of comparison}
+#' }
 #' @references
-#' Khoury et al. (2019) Diversity and Distributions 26(2):209-225. doi: 10.1111/DDI.1300
-#' @source \url{https://dataverse.harvard.edu/dataverse/GapAnalysis}
-"CucurbitaRasters"
+#' Clavijo-Buriticá, Sosa, C.C., Mosquera, A.J. Álvarez, A., Medina, J. Quimbaya,
+#' M.A. A systematic comparison of the molecular machinery associated with Cancer-Hallmarks
+#' between plants and humans reveals Arabidopsis thaliana as a useful model to understand
+#' specific carcinogenic events (to be submitted, Target journal: Plos Biology)
+#' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
+"H_sapiens_compress"
 
-#' @title Ecoregions shapefile
-#' @name ecoregions
+#' @title A thaliana functional enrichment analysis  of 2224 ortholog genes related to cancer-hallmarks
+#' @name A_thaliana
 #' @docType data
-#' @format Shapefile
-#' @description This dataset is a subset of the Terrestrial Ecoregions
-#'  shapefile made by the Nature Conservancy
-#' @source \url{http://maps.tnc.org/gis_data.html}
-"ecoregions"
-
-#' @title Protected areas dataset in raster format
-#' @name  ProtectedAreas
-#' @docType data
-#' @format Raster file
-#' @description This dataset is a raster version of the world protected areas dataset
-#'  used in Khoury et al., (2019)
+#' @description This dataset is the original dataset obtained for Clavijo-Buriticá (In preparation)
+#' @format A data frame with 4063 rows and 6 variables:
+#' \describe{
+#'   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
+#'   \item{Genes_in_list}{numeric: Number of genes in the list of genes for a given GO term}
+#'   \item{Total_genes}{numeric: Number of genes in the genome of a species for a given GO term}
+#'   \item{Functional_Category}{character: GO term name or GO term id}
+#'   \item{Genes}{character: Genes found fot a given GO term}
+#'   \item{feature}{character: A column representing the belonging of a group of comparison}
+#' }
 #' @references
-#' Khoury et al. (2019) Ecological Indicators 98:420-429. doi: 10.1016/j.ecolind.2018.11.016
-#' @source \url{https://www.protectedplanet.net/}
-"ProtectedAreas"
+#' Clavijo-Buriticá, Sosa, C.C., Mosquera, A.J. Álvarez, A., Medina, J. Quimbaya,
+#' M.A. A systematic comparison of the molecular machinery associated with Cancer-Hallmarks
+#' between plants and humans reveals Arabidopsis thaliana as a useful model to understand
+#' specific carcinogenic events (to be submitted, Target journal: Plos Biology)
+#' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1s}
+"A_thaliana"
+
+#' @title H. sapiens functional enrichment analysis of 5494 genes related to cancer-hallmarks
+#' @name H_sapiens
+#' @docType data
+#' @description This dataset is a subset of the original dataset obtained for Clavijo-Buriticá (In preparation)
+#' @format A data frame with 2000 rows and 6 variables:
+#' \describe{
+#'   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
+#'   \item{Genes_in_list}{numeric: Number of genes in the list of genes for a given GO term}
+#'   \item{Total_genes}{numeric: Number of genes in the genome of a species for a given GO term}
+#'   \item{Functional_Category}{character: GO term name or GO term id}
+#'   \item{Genes}{character: Genes found fot a given GO term}
+#'   \item{feature}{character: A column representing the belonging of a group of comparison}
+#' }
+#' @references
+#' Clavijo-Buriticá, Sosa, C.C., Mosquera, A.J. Álvarez, A., Medina, J. Quimbaya,
+#' M.A. A systematic comparison of the molecular machinery associated with Cancer-Hallmarks
+#' between plants and humans reveals Arabidopsis thaliana as a useful model to understand
+#' specific carcinogenic events (to be submitted, Target journal: Plos Biology)
+#' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
+"H_sapiens"

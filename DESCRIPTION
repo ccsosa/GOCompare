@@ -1,25 +1,26 @@
 Package: GOCompare
-Title: Comprehensiven comparison of GO terms between species
-Version: 1.0.2
+Title: Comprehensive comparison of GO terms between species
+Version: 1.0.0
 Authors@R: c(person("Chrystian", "Sosa",role = c("aut","cre","cph"), comment = c(ORCID = "0000-0002-3734-3248"),
                     email= "chrystiam.sossa@gmail.com"),
-             person("Carolina", "Clavijo", role = c("aut","cph"),email= "c.khoury@cgiar.org"),
-             person("Mauricio", "Quimbaya",role = c("aut","cre","cph"), comment = c(ORCID = "0000-0002-8044-583X"),
-                    email = "maquimbaya@javerianacali.edu.co"))
+             person("Carolina", "Clavijo", role = c("aut","ctb"),email = "diana.clavijo@javerianacali.edu.co"),
+             person("Mauricio", "Quimbaya",role = c("aut","ctb"),email = "maquimbaya@javerianacali.edu.co"))
 Description: Supports the assessment of a list of genes and their respective GO term and compare with a list of orthologues
   to allow compare and know the degree of closeness as well as create graph with this information.
 URL: https://github.com/ccsosa/GOCompare
-BugReports: hhttps://github.com/ccsosa/GOCompare/issues
+BugReports: https://github.com/ccsosa/GOCompare/issues
 Depends:
   R (>= 4.0.0),
 Imports:
   base (>= 3.5),
   utils (>= 3.5),
-  data.table,
-  methods (>= 3.5)
+  methods (>= 3.5),
+  ape,
+  vegan,
+  ggplot2,
+  ggrepel
 Suggests:
-  knitr,
-  DT
+  igraph
 License: GPL-3
 LazyData: true
 Encoding: UTF-8
