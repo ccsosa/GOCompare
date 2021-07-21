@@ -28,7 +28,7 @@
 #' #Running function
 #' x <- compareGOspecies(H_sapiens_compress,A_thaliana_compress,GOterm_field,species1,species2)
 #' #Displaying PCoA results
-#' x$graphic
+#' x$graphics
 #' # Checking shared GO terms between species
 #' print(tapply(x$shared_GO_list$feature,x$shared_GO_list$feature,length))
 #' # Checking unique GO terms for each species
@@ -164,11 +164,12 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
 
   shared_GO_list <- do.call(rbind,shared_GO_list)
   unique_GO_list <- do.call(rbind,unique_GO_list)
+  shared_GO_list$species <- "Shared"
 
   row.names(shared_GO_list) <- NULL
   row.names(unique_GO_list) <- NULL
 
-  ov_plot_list <- list(graphic= ov_plot, distance = jacc_dist,shared_GO_list=shared_GO_list,unique_GO_list=unique_GO_list)
+  ov_plot_list <- list(graphics= ov_plot, distance = jacc_dist,shared_GO_list=shared_GO_list,unique_GO_list=unique_GO_list)
 
   return(ov_plot_list)
 }

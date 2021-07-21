@@ -1,56 +1,30 @@
-#' @title Comprehensive visual and graph comparison between two species and a series of categories
-#' @name compareGOspecies
-#' @description compareGOspecies provides a simple workflow to compare  results of functional enrichment analysis
-#'  for two species and a column which represent features to be compared.
-#'  This function will extract the unique GO terms for two matrices matrices provided and will generate a presence-
-#'  absence matrix where rows will represent a combination of categories and species(e.g H.sapies AID) and columns will be
-#'  the GO terms analyzed.Further, this code will calculate Jaccard distances and will provide as outputs a principal
-#'  coordinates analysis (PCoA), the jaccard distance matrix, the list of shared GO terms between species and finally,
-#'  a list of the unique GO terms and the belongig to the species.
-#' @param df1 A data frame with the results of a functional enrichment analysis for the species 1 with an extra column "feature" with
-#'  the features to be compared
-#' @param df2 A data frame with the results of a functional enrichment analysis for the species 2 with an extra column "feature" with
+#' @title network representation in format graphml for the results of functional enrichment analysis for one species
+#' @name graphGOspecies
+#' @description graphGOspecies is a function to create undirected graphs using two options:
+#' 1.) Nodes are GO terms such as biological processes and the edges are features.
+#' 2.) Nodes are features  and the edges are O terms such as biological processes.
+#' @param df A data frame with the results of a functional enrichment analysis for a species with an extra column "feature" with
 #'  the features to be compared
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional.Category")
-#' @param species1 This is a string with the species name for the species 1 (e.g; "H. sapiens")
-#' @param species2 This is a string with the species name for the species 2 (e.g; "A. thaliana")
-#' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional.Category")
-#' @return This function will return a list with four slots: graphic, distance shared_GO_list,and unique_GO_list
+#' @param option  (values: 1 or 2). This option allows create either a graph where nodes are GO terms and edges are features or
+#' a graph where nodes are features and edges are GO terms (default value=2).
+#' @param saveGraph logical, if \code{TRUE} the function will allow save the graph in graphml format
+#' @param outdir This parameter will allow save the graph file in a folder described here (e.g: "D:").This parameter only
+#' works when saveGraph=TRUE
+#' @return This function will return a table representing an edge list
 #' @examples
 #'
 #' #Loading example datasets
-#' data(H_sapiens_compress)
-#' data(A_thaliana_compress)
+#' data(H_sapiens)
 #' #Defining the column with the GO terms to be compared
 #' GOterm_field <- "Functional.Category"
-#' #Defining the species names
-#' species1 <- "H. sapiens"
-#' species2 <- "A. thaliana"
 #' #Running function
-#' x <- compareGOspecies(H_sapiens_compress,A_thaliana_compress,GOterm_field,species1,species2)
-#' #Displaying PCoA results
-#' x$graphic
-#' # Checking shared GO terms between species
-#' print(tapply(x$shared_GO_list$feature,x$shared_GO_list$feature,length))
-#' # Checking unique GO terms for each species
-#' print(tapply(x$unique_GO_list$species,x$unique_GO_list$species,length))
+#' x <- graphGOspecies(H_sapiens, GOterm_field, option = 2, saveGraph=FALSE,outdir = NULL)
+#' #Displaying results
+#' head(x)
+#' @importFrom utils combn setTxtProgressBar txtProgressBar
+#' @importFrom igraph graph_from_data_frame write.graph
 #' @export
-#' @importFrom vegan vegdist
-#' @importFrom ape pcoa
-#' @importFrom ggplot2 ggplot geom_polygon geom_point
-#' @importFrom ggrepel geom_text_repel
-
-
-dir2 <-
-  "D:/PROGRAMAS/Dropbox/shared/CANCER_HALLMARKS/GOCompare/GOCompare/data"
-outdir <- "D:"
-#load(paste0(dir2,"/","A_thaliana.rda"))
-load(paste0(dir2, "/", "H_sapiens.rda"))
-
-
-df <- H_sapiens
-GOterm_field <- "Functional_Category"
-
 
 graphGOspecies <- function(df, GOterm_field, option = 2, saveGraph = FALSE,outdir = NULL) {
   if (is.null(option)) {
@@ -58,7 +32,7 @@ graphGOspecies <- function(df, GOterm_field, option = 2, saveGraph = FALSE,outdi
   }
 
   if (isTRUE(saveGraph) & is.null(outdir)) {
-    stop("Please add a valid pathway to save your graph")
+    stop("Please add a valid path to save your graph")
   }
 
   features_list <- unique(df[, "feature"])
@@ -66,7 +40,7 @@ graphGOspecies <- function(df, GOterm_field, option = 2, saveGraph = FALSE,outdi
 
 
   if (isTRUE(option == 1)) {
-    message("Using features as edge")
+    message("Using features as edges")
     pb <-
       utils::txtProgressBar(min = 0,
                             max = length(features_list),
@@ -78,7 +52,7 @@ graphGOspecies <- function(df, GOterm_field, option = 2, saveGraph = FALSE,outdi
 
       x <- df[, GOterm_field][which(df$feature == features_list[[i]])]
       if (length(x) > 1) {
-        x <- data.frame(t(combn(x, 2)), GO = features_list[[i]])
+        x <- data.frame(t(utils::combn(x, 2)), GO = features_list[[i]])
         colnames(x) <- c("SOURCE", "TARGET", "GO")
       } else {
         message(paste("No records for", features_list[[i]]))
@@ -105,7 +79,7 @@ graphGOspecies <- function(df, GOterm_field, option = 2, saveGraph = FALSE,outdi
 
       x <- df$feature[which(df[, GOterm_field] == GO_list[[i]])]
       if (length(x) > 1) {
-        x <- data.frame(t(combn(x, 2)), GO = GO_list[[i]])
+        x <- data.frame(t(utils::combn(x, 2)), GO = GO_list[[i]])
         colnames(x) <- c("SOURCE", "TARGET", "FEATURE")
 }
       return(x)
@@ -118,20 +92,16 @@ graphGOspecies <- function(df, GOterm_field, option = 2, saveGraph = FALSE,outdi
 
   if (isTRUE(saveGraph)) {
     if (isTRUE(option == 1)) {
-      x1 <- graph_from_data_frame(option1, directed = FALSE)
-      write.graph(x1,
+      x1 <- igraph::graph_from_data_frame(option1, directed = FALSE)
+      igraph::write.graph(x1,
                   file = paste0(outdir, "/", "option1.graphml"),
                   format = "graphml")
     } else {
-      x2 <- graph_from_data_frame(option2, directed = FALSE)
-      write.graph(x2,
+      x2 <- igraph::graph_from_data_frame(option2, directed = FALSE)
+      igraph::write.graph(x2,
                   file = paste0(outdir, "/", "option2.graphml"),
                   format = "graphml")
     }
   }
 
 }
-
-
-
-#x <- graphGOspecies(df, GOterm_field, option = 2, saveGraph=FALSE,outdir = NULL)

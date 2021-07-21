@@ -17,6 +17,7 @@
 #' FDR \tab Multiple comparison correction for the pvalue column \cr
 #' }
 #' @examples
+#'
 #' #Loading example datasets
 #' data(H_sapiens)
 #' data(A_thaliana)
