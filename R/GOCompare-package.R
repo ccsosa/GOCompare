@@ -1,4 +1,5 @@
-#' GOCompare is a an R package used to compare a GO terms list between two species
+#' GOCompare is a an R package used to compare a GO terms list between 
+#'  two species
 #' @name GOCompare-package
 #' @aliases GOCompare
 #' @aliases GOCompare-package

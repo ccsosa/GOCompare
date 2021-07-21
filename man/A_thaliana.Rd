@@ -3,7 +3,8 @@
 \docType{data}
 \name{A_thaliana}
 \alias{A_thaliana}
-\title{A thaliana functional enrichment analysis  of 2224 ortholog genes related to cancer-hallmarks}
+\title{A thaliana functional enrichment analysis  of 2224 ortholog genes related
+ to cancer-hallmarks}
 \format{
 A data frame with 4063 rows and 6 variables:
 \describe{

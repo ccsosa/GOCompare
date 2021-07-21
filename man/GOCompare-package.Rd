@@ -6,7 +6,8 @@
 \alias{GOCompare}
 \title{GOCompare: An R package to compare GO terms of a gene list  and their orthologs}
 \description{
-GOCompare is a an R package used to compare a GO terms list between two species
+GOCompare is a an R package used to compare a GO terms list between 
+ two species
 }
 \details{
 \tabular{ll}{

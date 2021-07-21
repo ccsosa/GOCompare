@@ -1,7 +1,9 @@
-#' @title A thaliana functional enrichment analysis results for "AID","DCE","RCD","SPS" cancer-hallmarks
+#' @title A thaliana functional enrichment analysis results for
+#'  "AID","DCE","RCD","SPS" cancer-hallmarks
 #' @name A_thaliana_compress
 #' @docType data
-#' @description This dataset is a subset of the original dataset obtained for Clavijo-Buriticá (In preparation)
+#' @description This dataset is a subset of the original dataset obtained
+#'  for Clavijo-Buriticá (In preparation)
 #' @format A data frame with 2000 rows and 6 variables:
 #' \describe{
 #'   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
@@ -19,10 +21,12 @@
 #' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
 "A_thaliana_compress"
 
-#' @title H. sapiens functional enrichment analysis results for "AID","DCE","RCD","SPS" cancer-hallmarks
+#' @title H. sapiens functional enrichment analysis results for
+#'  "AID","DCE","RCD","SPS" cancer-hallmarks
 #' @name H_sapiens_compress
 #' @docType data
-#' @description This dataset is a subset of the original dataset obtained for Clavijo-Buriticá (In preparation)
+#' @description This dataset is a subset of the original dataset obtained 
+#' for Clavijo-Buriticá (In preparation)
 #' @format A data frame with 2000 rows and 6 variables:
 #' \describe{
 #'   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
@@ -40,7 +44,8 @@
 #' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
 "H_sapiens_compress"
 
-#' @title A thaliana functional enrichment analysis  of 2224 ortholog genes related to cancer-hallmarks
+#' @title A thaliana functional enrichment analysis  of 2224 ortholog genes related
+#'  to cancer-hallmarks
 #' @name A_thaliana
 #' @docType data
 #' @description This dataset is the original dataset obtained for Clavijo-Buriticá (In preparation)

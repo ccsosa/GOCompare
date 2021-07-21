@@ -1,13 +1,16 @@
-#' @title Comprehensive visual and graph comparison between two species and a series of categories
+#' @title Comprehensive visual and graph comparison between two species and
+#'  a series of categories
 #' @name graph_two_GOspecies
-#' @description graph_two_GOspecies is a function to create undirected graphs to compare GO terms between two species using two options:
+#' @description graph_two_GOspecies is a function to create undirected graphs
+#'  to compare GO terms between two species using two options:
 #' 1.) Nodes are GO terms such as biological processes and the edges are features and species are edges attributes
 #' 2.) Nodes are GO terms such as biological processes and species status (e.g. A.thaliana, H. sapiens or shared) are edgess
 #' @param x is a list of running the comparegOspecies species.
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional_Category")
 #' @param species1 This is a string with the species name for the species 1 (e.g; "H. sapiens")
 #' @param species2 This is a string with the species name for the species 2 (e.g; "A. thaliana")
-#' @param option  (values: 1 or 2). This option allows create either a graph where nodes are GO terms and edges are features and species are edges arributes or
+#' @param option  (values: 1 or 2). This option allows create either a graph 
+#'  where nodes are GO terms and edges are features and species are edges arributes or
 #'  a graph where nodes are GO terms and edges are species belonging  (default value=2).
 #' @param saveGraph logical, if \code{TRUE} the function will allow save the graph in graphml format
 #' @param outdir This parameter will allow save the graph file in a folder described here (e.g: "D:").This parameter only

@@ -2,16 +2,17 @@
 % Please edit documentation in R/compareGOspecies.R
 \name{compareGOspecies}
 \alias{compareGOspecies}
-\title{Comprehensive visual and graph comparison between two species and a series of categories}
+\title{Comprehensive visual and graph comparison between two species and 
+ a series of categories}
 \usage{
 compareGOspecies(df1, df2, GOterm_field, species1, species2)
 }
 \arguments{
-\item{df1}{A data frame with the results of a functional enrichment analysis for the species 1 with an extra column "feature" with
-the features to be compared}
+\item{df1}{A data frame with the results of a functional enrichment analysis for the species 1
+with an extra column "feature" with the features to be compared}
 
-\item{df2}{A data frame with the results of a functional enrichment analysis for the species 2 with an extra column "feature" with
-the features to be compared}
+\item{df2}{A data frame with the results of a functional enrichment analysis for the species 2
+with an extra column "feature" with the features to be compared}
 
 \item{GOterm_field}{This is a string with the column name of the GO terms (e.g; "Functional_Category")}
 
@@ -23,13 +24,16 @@ the features to be compared}
 This function will return a list with four slots: graphics, distance shared_GO_list,and unique_GO_list
 }
 \description{
-compareGOspecies provides a simple workflow to compare  results of functional enrichment analysis
+compareGOspecies provides a simple workflow to compare results
+ of functional enrichment analysis
  for two species and a column which represent features to be compared.
- This function will extract the unique GO terms for two matrices matrices provided and will generate a presence-
- absence matrix where rows will represent a combination of categories and species(e.g H.sapies AID) and columns will be
- the GO terms analyzed.Further, this code will calculate Jaccard distances and will provide as outputs a principal
- coordinates analysis (PCoA), the jaccard distance matrix, the list of shared GO terms between species and finally,
- a list of the unique GO terms and the belongig to the species.
+ This function will extract the unique GO terms for two matrices matrices 
+ provided and will generate a presence-absence matrix where rows will represent
+ a combination of categories and species(e.g H.sapies AID) and columns will be
+ the GO terms analyzed.Further, this code will calculate Jaccard distances and
+ will provide as outputs a principal
+ coordinates analysis (PCoA), the jaccard distance matrix, the list of shared
+ GO terms between species and finally, a list of the unique GO terms and the belongig to the species.
 }
 \examples{
 

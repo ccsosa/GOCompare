@@ -3,7 +3,8 @@
 \docType{data}
 \name{A_thaliana_compress}
 \alias{A_thaliana_compress}
-\title{A thaliana functional enrichment analysis results for "AID","DCE","RCD","SPS" cancer-hallmarks}
+\title{A thaliana functional enrichment analysis results for
+ "AID","DCE","RCD","SPS" cancer-hallmarks}
 \format{
 A data frame with 2000 rows and 6 variables:
 \describe{
@@ -22,7 +23,8 @@ A data frame with 2000 rows and 6 variables:
 A_thaliana_compress
 }
 \description{
-This dataset is a subset of the original dataset obtained for Clavijo-Buriticá (In preparation)
+This dataset is a subset of the original dataset obtained
+ for Clavijo-Buriticá (In preparation)
 }
 \references{
 Clavijo-Buriticá, Sosa, C.C., Mosquera, A.J. Álvarez, A., Medina, J. Quimbaya,

@@ -3,7 +3,8 @@
 \docType{data}
 \name{H_sapiens_compress}
 \alias{H_sapiens_compress}
-\title{H. sapiens functional enrichment analysis results for "AID","DCE","RCD","SPS" cancer-hallmarks}
+\title{H. sapiens functional enrichment analysis results for
+ "AID","DCE","RCD","SPS" cancer-hallmarks}
 \format{
 A data frame with 2000 rows and 6 variables:
 \describe{
@@ -22,7 +23,8 @@ A data frame with 2000 rows and 6 variables:
 H_sapiens_compress
 }
 \description{
-This dataset is a subset of the original dataset obtained for Clavijo-Buriticá (In preparation)
+This dataset is a subset of the original dataset obtained 
+for Clavijo-Buriticá (In preparation)
 }
 \references{
 Clavijo-Buriticá, Sosa, C.C., Mosquera, A.J. Álvarez, A., Medina, J. Quimbaya,

@@ -2,13 +2,14 @@
 % Please edit documentation in R/graph_GOspecies.R
 \name{graphGOspecies}
 \alias{graphGOspecies}
-\title{network representation in format graphml for the results of functional enrichment analysis for one species}
+\title{network representation in format graphml for the results of functional
+ enrichment analysis for one species}
 \usage{
 graphGOspecies(df, GOterm_field, option = 2, saveGraph = FALSE, outdir = NULL)
 }
 \arguments{
-\item{df}{A data frame with the results of a functional enrichment analysis for a species with an extra column "feature" with
-the features to be compared}
+\item{df}{A data frame with the results of a functional enrichment analysis for
+a species with an extra column "feature" with the features to be compared}
 
 \item{GOterm_field}{This is a string with the column name of the GO terms (e.g; "Functional.Category")}
 

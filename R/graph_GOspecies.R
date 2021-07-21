@@ -1,10 +1,11 @@
-#' @title network representation in format graphml for the results of functional enrichment analysis for one species
+#' @title network representation in format graphml for the results of functional
+#'  enrichment analysis for one species
 #' @name graphGOspecies
 #' @description graphGOspecies is a function to create undirected graphs using two options:
 #' 1.) Nodes are GO terms such as biological processes and the edges are features.
 #' 2.) Nodes are features  and the edges are O terms such as biological processes.
-#' @param df A data frame with the results of a functional enrichment analysis for a species with an extra column "feature" with
-#'  the features to be compared
+#' @param df A data frame with the results of a functional enrichment analysis for
+#'  a species with an extra column "feature" with the features to be compared
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional.Category")
 #' @param option  (values: 1 or 2). This option allows create either a graph where nodes are GO terms and edges are features or
 #' a graph where nodes are features and edges are GO terms (default value=2).

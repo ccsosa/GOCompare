@@ -2,22 +2,25 @@
 % Please edit documentation in R/evaluateGO_species.R
 \name{evaluateGO_species}
 \alias{evaluateGO_species}
-\title{Comprehensive comparison between species using GO terms and Pearson's Chi-squared Tests}
+\title{Comprehensive comparison between species using GO terms and Pearson's
+ Chi-squared Tests}
 \usage{
 evaluateGO_species(df1, df2, species1, species2, GOterm_field)
 }
 \arguments{
-\item{df1}{A data frame with the results of a functional enrichment analysis for the species 1 with an extra column "feature" with
-the features to be compared}
+\item{df1}{A data frame with the results of a functional enrichment analysis
+for the species 1 with an extra column "feature" with the features to be compared}
 
-\item{df2}{A data frame with the results of a functional enrichment analysis for the species 2 with an extra column "feature" with
+\item{df2}{A data frame with the results of a functional enrichment analysis
+for the species 2 with an extra column "feature" with
 the features to be compared}
 
 \item{species1}{This is a string with the species name for the species 1 (e.g; "H. sapiens")}
 
 \item{species2}{This is a string with the species name for the species 2 (e.g; "A. thaliana")}
 
-\item{GOterm_field}{This is a string with the column name of the GO terms (e.g; "Functional.Category")}
+\item{GOterm_field}{This is a string with the column name of the GO terms
+(e.g; "Functional_Category")}
 }
 \value{
 This function will return a data.frame with the following fields:
@@ -28,8 +31,9 @@ FDR \tab Multiple comparison correction for the pvalue column \cr
 }
 }
 \description{
-evaluateGO_species provides a simple workflow to compare results of functional enrichment analysis
- for two species through the use Pearson's Chi-squared Tests and a False discovery rate correction
+evaluateGO_species provides a simple workflow to compare results
+ of functional enrichment analysis for two species through the use Pearson's
+ Chi-squared Tests and a False discovery rate correction
 }
 \examples{
 

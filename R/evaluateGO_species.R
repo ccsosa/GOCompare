@@ -1,13 +1,17 @@
-#' @title Comprehensive comparison between species using GO terms and Pearson's Chi-squared Tests
+#' @title Comprehensive comparison between species using GO terms and Pearson's
+#'  Chi-squared Tests
 #' @name evaluateGO_species
-#' @description evaluateGO_species provides a simple workflow to compare results of functional enrichment analysis
-#'  for two species through the use Pearson's Chi-squared Tests and a False discovery rate correction
+#' @description evaluateGO_species provides a simple workflow to compare results
+#'  of functional enrichment analysis for two species through the use Pearson's
+#'  Chi-squared Tests and a False discovery rate correction
 #'
-#' @param df1 A data frame with the results of a functional enrichment analysis for the species 1 with an extra column "feature" with
+#' @param df1 A data frame with the results of a functional enrichment analysis
+#'  for the species 1 with an extra column "feature" with the features to be compared
+#' @param df2 A data frame with the results of a functional enrichment analysis
+#'  for the species 2 with an extra column "feature" with
 #'  the features to be compared
-#' @param df2 A data frame with the results of a functional enrichment analysis for the species 2 with an extra column "feature" with
-#'  the features to be compared
-#' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional.Category")
+#' @param GOterm_field This is a string with the column name of the GO terms
+#'  (e.g; "Functional_Category")
 #' @param species1 This is a string with the species name for the species 1 (e.g; "H. sapiens")
 #' @param species2 This is a string with the species name for the species 2 (e.g; "A. thaliana")
 #' @return This function will return a data.frame with the following fields:

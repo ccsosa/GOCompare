@@ -2,7 +2,8 @@
 % Please edit documentation in R/graph_two_GOspecies.R
 \name{graph_two_GOspecies}
 \alias{graph_two_GOspecies}
-\title{Comprehensive visual and graph comparison between two species and a series of categories}
+\title{Comprehensive visual and graph comparison between two species and
+ a series of categories}
 \usage{
 graph_two_GOspecies(
   x,
@@ -25,7 +26,8 @@ graph_two_GOspecies(
 
 \item{saveGraph}{logical, if \code{TRUE} the function will allow save the graph in graphml format}
 
-\item{option}{(values: 1 or 2). This option allows create either a graph where nodes are GO terms and edges are features and species are edges arributes or
+\item{option}{(values: 1 or 2). This option allows create either a graph 
+where nodes are GO terms and edges are features and species are edges arributes or
 a graph where nodes are GO terms and edges are species belonging  (default value=2).}
 
 \item{outdir}{This parameter will allow save the graph file in a folder described here (e.g: "D:").This parameter only
@@ -35,7 +37,8 @@ works when saveGraph=TRUE}
 This function will return a table representing an edge list
 }
 \description{
-graph_two_GOspecies is a function to create undirected graphs to compare GO terms between two species using two options:
+graph_two_GOspecies is a function to create undirected graphs
+ to compare GO terms between two species using two options:
 1.) Nodes are GO terms such as biological processes and the edges are features and species are edges attributes
 2.) Nodes are GO terms such as biological processes and species status (e.g. A.thaliana, H. sapiens or shared) are edgess
 }

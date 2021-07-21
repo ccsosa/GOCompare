@@ -1,16 +1,20 @@
-#' @title Comprehensive visual and graph comparison between two species and a series of categories
+#' @title Comprehensive visual and graph comparison between two species and 
+#'  a series of categories
 #' @name compareGOspecies
-#' @description compareGOspecies provides a simple workflow to compare  results of functional enrichment analysis
+#' @description compareGOspecies provides a simple workflow to compare results
+#'  of functional enrichment analysis
 #'  for two species and a column which represent features to be compared.
-#'  This function will extract the unique GO terms for two matrices matrices provided and will generate a presence-
-#'  absence matrix where rows will represent a combination of categories and species(e.g H.sapies AID) and columns will be
-#'  the GO terms analyzed.Further, this code will calculate Jaccard distances and will provide as outputs a principal
-#'  coordinates analysis (PCoA), the jaccard distance matrix, the list of shared GO terms between species and finally,
-#'  a list of the unique GO terms and the belongig to the species.
-#' @param df1 A data frame with the results of a functional enrichment analysis for the species 1 with an extra column "feature" with
-#'  the features to be compared
-#' @param df2 A data frame with the results of a functional enrichment analysis for the species 2 with an extra column "feature" with
-#'  the features to be compared
+#'  This function will extract the unique GO terms for two matrices matrices 
+#'  provided and will generate a presence-absence matrix where rows will represent
+#'  a combination of categories and species(e.g H.sapies AID) and columns will be
+#'  the GO terms analyzed.Further, this code will calculate Jaccard distances and
+#'  will provide as outputs a principal
+#'  coordinates analysis (PCoA), the jaccard distance matrix, the list of shared
+#'  GO terms between species and finally, a list of the unique GO terms and the belongig to the species.
+#' @param df1 A data frame with the results of a functional enrichment analysis for the species 1
+#'  with an extra column "feature" with the features to be compared
+#' @param df2 A data frame with the results of a functional enrichment analysis for the species 2
+#'  with an extra column "feature" with the features to be compared
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional_Category")
 #' @param species1 This is a string with the species name for the species 1 (e.g; "H. sapiens")
 #' @param species2 This is a string with the species name for the species 2 (e.g; "A. thaliana")
