@@ -66,7 +66,7 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
   row.names(mat_for_dist) <- comb_all_feat
   colnames(mat_for_dist) <- GO_terms_unique
   comb_all_feat <- strsplit(comb_all_feat," - ")
-  comb_all_feat <- lapply(1:length(comb_all_feat),function(i){
+  comb_all_feat <- lapply(seq_len(length(comb_all_feat)),function(i){
     x <- data.frame(species=comb_all_feat[[i]][1],feature=comb_all_feat[[i]][2])
   })
 
@@ -81,11 +81,11 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
   message("Extracting data to calculate jaccard distances")
   pb <- utils::txtProgressBar(min = 0, max = nrow(mat_for_dist), style = 3)
 
-  for(i in 1:nrow(mat_for_dist)){
+  for(i in seq_len(nrow(mat_for_dist))){
     #message(paste(round((i/nrow(mat_for_dist)*100),2),"%"))
     utils::setTxtProgressBar(pb, i)
 
-    for(j in 1:ncol(mat_for_dist)){
+    for(j in seq_len(ncol(mat_for_dist))){
       if(nrow(df_total[which(df_total$feature == comb_all_feat[i,2] &
                              df_total$species == comb_all_feat[i,1] &
                              df_total[,GOterm_field]==GO_terms_unique[[j]]),])>0){
@@ -98,7 +98,7 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
   };rm(i)
   close(pb)
 
-  jacc_dist <- vegan::vegdist(mat_for_dist,method = "jaccard",na.rm = T)
+  jacc_dist <- vegan::vegdist(mat_for_dist,method = "jaccard",na.rm = TRUE)
 
   vare.mds <- ape::pcoa(jacc_dist)
   vare.mds2 <- as.data.frame(vare.mds$vectors[,1:2])
@@ -120,7 +120,7 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
     #scale_fill_manual(values=c(species1 = "green", species2= "blue")) +
     ggplot2::geom_point(data=vare.mds2,ggplot2::aes(x=Axis.1,y=Axis.2,colour=species),size=8,alpha=0.5) + # add the point markers
     ggrepel::geom_text_repel(data=species.scores,ggplot2::aes(x=Axis.1,y=Axis.2,label=grp),
-                             alpha=0.5,size=5, show.legend = FALSE,colour= 'black',na.rm=T
+                             alpha=0.5,size=5, show.legend = FALSE,colour= 'black',na.rm=TRUE
                              # force = 30, segment.colour = NA
     )
 
@@ -134,7 +134,7 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
 
   pb <- utils::txtProgressBar(min = 0, max = length(comb_feat_3), style = 3)
 
-  for(i in 1:length(comb_feat_3)){
+  for(i in seq_len(length(comb_feat_3))){
     utils::setTxtProgressBar(pb, i)
 
     x <- as.numeric(row.names(comb_all_feat[comb_all_feat$feature %in% comb_feat_3[[i]],]))
@@ -143,7 +143,7 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
     x_un_col <- x_col[which(x_col$status<2 & x_col$status >0),]
 
     x_un_list_i <- list()
-    for(j in 1:nrow(x_un_col)){
+    for(j in seq_len(nrow(x_un_col))){
 
       x_st <- x[,which(colnames(x) == x_un_col$GO[[j]]),]
       if(x_st[1]==1){

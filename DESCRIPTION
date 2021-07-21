@@ -1,5 +1,5 @@
 Package: GOCompare
-Title: Comprehensive GO terms comparison between species
+Title:'Comprehensive GO Terms Comparison Between Species
 Version: 1.0.0
 Authors@R: c(person("Chrystian", "Sosa",role = c("aut","cre","cph"), comment = c(ORCID = "0000-0002-3734-3248"),
                     email= "chrystiam.sossa@gmail.com"),
@@ -24,3 +24,6 @@ License: GPL-3
 LazyData: true
 Encoding: UTF-8
 RoxygenNote: 7.1.1
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

@@ -50,7 +50,7 @@ graphGOspecies <- function(df, GOterm_field, option = 2, saveGraph = FALSE,outdi
                             max = length(features_list),
                             style = 3)
 
-    option1 <- lapply(1:length(features_list), function(i) {
+    option1 <- lapply(seq_len(length(features_list)), function(i) {
       utils::setTxtProgressBar(pb, i)
 
 
@@ -77,7 +77,7 @@ graphGOspecies <- function(df, GOterm_field, option = 2, saveGraph = FALSE,outdi
                             max = length(GO_list),
                             style = 3)
 
-    option2 <- lapply(1:length(GO_list), function(i) {
+    option2 <- lapply(seq_len(length(GO_list)), function(i) {
       utils::setTxtProgressBar(pb, i)
 
 

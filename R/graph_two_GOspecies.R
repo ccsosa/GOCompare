@@ -61,7 +61,7 @@ graph_two_GOspecies <-
 
 
 
-      graph_db1 <- lapply(1:length(GO_list), function(i) {
+      graph_db1 <- lapply(seq_len(length(GO_list)), function(i) {
         utils::setTxtProgressBar(pb, i)
 
 
@@ -176,7 +176,7 @@ graph_two_GOspecies <-
         utils::txtProgressBar(min = 0,
                               max = length(unique_sp),
                               style = 3)
-      graph_db2 <- lapply(1:length(unique_sp), function(i) {
+      graph_db2 <- lapply(seq_len(length(unique_sp)), function(i) {
         utils::setTxtProgressBar(pb, i)
         x <-
           unique(join_db$GO[which(join_db$species == unique_sp[[i]])])

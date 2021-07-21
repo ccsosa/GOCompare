@@ -60,7 +60,7 @@ evaluateGO_species <-
                             max = length(GO_list),
                             style = 3)
 
-    chisq_db1 <- lapply(1:length(GO_list), function(i) {
+    chisq_db1 <- lapply(seq_len(length(GO_list)), function(i) {
       utils::setTxtProgressBar(pb, i)
 
       x <-
