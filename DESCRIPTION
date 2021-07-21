@@ -18,8 +18,7 @@ Imports:
   ape,
   vegan,
   ggplot2,
-  ggrepel
-Suggests:
+  ggrepel,
   igraph
 License: GPL-3
 LazyData: true

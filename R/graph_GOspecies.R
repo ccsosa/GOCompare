@@ -17,9 +17,13 @@
 #' #Loading example datasets
 #' data(H_sapiens)
 #' #Defining the column with the GO terms to be compared
-#' GOterm_field <- "Functional.Category"
+#' GOterm_field <- "Functional_Category"
 #' #Running function
-#' x <- graphGOspecies(H_sapiens, GOterm_field, option = 2, saveGraph=FALSE,outdir = NULL)
+#' x <- graphGOspecies(df=H_sapiens,
+#'                      GOterm_field=GOterm_field,
+#'                      option = 2,
+#'                      saveGraph=FALSE,
+#'                      outdir = NULL)
 #' #Displaying results
 #' head(x)
 #' @importFrom utils combn setTxtProgressBar txtProgressBar

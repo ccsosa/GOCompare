@@ -81,3 +81,22 @@
 #' specific carcinogenic events (to be submitted, Target journal: Plos Biology)
 #' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
 "H_sapiens"
+
+#' @title Functional enrichment analysis comparison between H. sapiens and A. thaliana
+#' @name comparison_example
+#' @docType data
+#' @description This dataset is the results of running the compareGOspecies species and
+#'  it is composed of four slots:
+#' \describe{
+#'   \item{graphics}{PCoA graphics}
+#'   \item{distance}{numeric: Jaccard distance matrix }
+#'   \item{shared_GO_list}{data.frame with shared GO terms between species}
+#'   \item{unique_GO_list}{data.frame with unique GO terms and their belonging two each species}
+#' }
+#' @references
+#' Clavijo-Buriticá, Sosa, C.C., Mosquera, A.J. Álvarez, A., Medina, J. Quimbaya,
+#' M.A. A systematic comparison of the molecular machinery associated with Cancer-Hallmarks
+#' between plants and humans reveals Arabidopsis thaliana as a useful model to understand
+#' specific carcinogenic events (to be submitted, Target journal: Plos Biology)
+#' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
+"comparison_example"

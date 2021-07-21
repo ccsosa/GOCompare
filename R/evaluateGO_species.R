@@ -22,12 +22,16 @@
 #' data(H_sapiens)
 #' data(A_thaliana)
 #' #Defining the column with the GO terms to be compared
-#' GOterm_field <- "Functional.Category"
+#' GOterm_field <- "Functional_Category"
 #' #Defining the species names
 #' species1 <- "H. sapiens"
 #' species2 <- "A. thaliana"
 #' #Running function
-#' x <- evaluateGO_species(df1,df2, species1,species2,GOterm_field)
+#' x <- evaluateGO_species(df1= H_sapiens,
+#'                        df2=A_thaliana,
+#'                        species1=species1,
+#'                        species2=species2,
+#'                        GOterm_field=GOterm_field)
 #' print(x)
 #' @importFrom stats chisq.test p.adjust
 #' @importFrom utils setTxtProgressBar txtProgressBar
@@ -35,6 +39,8 @@
 
 evaluateGO_species <-
   function(df1, df2, species1, species2, GOterm_field) {
+    df1$species <- NA
+    df2$species <- NA
     df1$species <- species1
     df2$species <- species2
     join_db <- rbind(df1, df2)

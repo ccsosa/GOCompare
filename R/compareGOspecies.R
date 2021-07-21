@@ -14,7 +14,7 @@
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional_Category")
 #' @param species1 This is a string with the species name for the species 1 (e.g; "H. sapiens")
 #' @param species2 This is a string with the species name for the species 2 (e.g; "A. thaliana")
-#' @return This function will return a list with four slots: graphic, distance shared_GO_list,and unique_GO_list
+#' @return This function will return a list with four slots: graphics, distance shared_GO_list,and unique_GO_list
 #' @examples
 #'
 #' #Loading example datasets
@@ -26,7 +26,11 @@
 #' species1 <- "H. sapiens"
 #' species2 <- "A. thaliana"
 #' #Running function
-#' x <- compareGOspecies(H_sapiens_compress,A_thaliana_compress,GOterm_field,species1,species2)
+#' x <- compareGOspecies(df1=H_sapiens_compress,
+#'                       df2=A_thaliana_compress,
+#'                       GOterm_field=GOterm_field,
+#'                       species1=species1,
+#'                       species2=species2)
 #' #Displaying PCoA results
 #' x$graphics
 #' # Checking shared GO terms between species

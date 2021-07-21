@@ -5,6 +5,8 @@
 #' 2.) Nodes are GO terms such as biological processes and species status (e.g. A.thaliana, H. sapiens or shared) are edgess
 #' @param x is a list of running the comparegOspecies species.
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional_Category")
+#' @param species1 This is a string with the species name for the species 1 (e.g; "H. sapiens")
+#' @param species2 This is a string with the species name for the species 2 (e.g; "A. thaliana")
 #' @param option  (values: 1 or 2). This option allows create either a graph where nodes are GO terms and edges are features and species are edges arributes or
 #'  a graph where nodes are GO terms and edges are species belonging  (default value=2).
 #' @param saveGraph logical, if \code{TRUE} the function will allow save the graph in graphml format
@@ -13,18 +15,17 @@
 #' @examples
 #'
 #' GOterm_field <- "Functional_Category"
+#' data(comparison_example)
 #' #Defining the species names
 #' species1 <- "H. sapiens"
 #' species2 <- "A. thaliana"
-#' data(H_sapiens)
-#' data(A_thaliana)
-#' x <-
-#'  compareGOspecies(H_sapiens,
-#'                   A_thaliana,
-#'                   GOterm_field,
-#'                   species1,
-#'                   species2)
-#' x_graph<- graph_two_GOspecies(x, GOterm_field, saveGraph = FALSE, option=1,outdir = NULL)
+#' x_graph <- graph_two_GOspecies(x=comparison_example,
+#'           species1=species1,
+#'           species2=species2,
+#'           GOterm_field=GOterm_field,
+#'           saveGraph = FALSE,
+#'           option=1,
+#'           outdir = NULL)
 #' head(x_graph)
 #' @return This function will return a table representing an edge list
 #' @importFrom utils combn setTxtProgressBar txtProgressBar
@@ -33,6 +34,8 @@
 
 graph_two_GOspecies <-
   function(x,
+           species1,
+           species2,
            GOterm_field,
            saveGraph = FALSE,
            option = 2,
