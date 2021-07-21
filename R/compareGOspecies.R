@@ -39,7 +39,6 @@
 #' @importFrom ggrepel geom_text_repel
 #' @importFrom grDevices chull
 #' @importFrom utils setTxtProgressBar txtProgressBar
-#'
 #' @export
 
 compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
