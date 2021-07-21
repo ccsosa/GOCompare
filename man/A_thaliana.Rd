@@ -16,7 +16,7 @@ A data frame with 4063 rows and 6 variables:
 }
 }
 \source{
-\url{https://data.mendeley.com/datasets/myyy2wxd59/1s}
+\url{https://data.mendeley.com/datasets/myyy2wxd59/1}
 }
 \usage{
 A_thaliana

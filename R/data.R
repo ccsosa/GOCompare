@@ -58,7 +58,7 @@
 #' M.A. A systematic comparison of the molecular machinery associated with Cancer-Hallmarks
 #' between plants and humans reveals Arabidopsis thaliana as a useful model to understand
 #' specific carcinogenic events (to be submitted, Target journal: Plos Biology)
-#' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1s}
+#' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
 "A_thaliana"
 
 #' @title H. sapiens functional enrichment analysis of 5494 genes related to cancer-hallmarks
