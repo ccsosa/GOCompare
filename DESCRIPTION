@@ -15,11 +15,15 @@ Imports:
   base (>= 3.5),
   utils (>= 3.5),
   methods (>= 3.5),
+  stats,
+  grDevices,
   ape,
   vegan,
   ggplot2,
   ggrepel,
-  igraph
+  igraph,
+  parallel,
+  stringr
 License: GPL-3
 LazyData: true
 Encoding: UTF-8

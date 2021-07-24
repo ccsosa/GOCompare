@@ -12,6 +12,7 @@ graph_two_GOspecies(
   GOterm_field,
   saveGraph = FALSE,
   option = 2,
+  numCores = 2,
   outdir = NULL
 )
 }
@@ -26,9 +27,11 @@ graph_two_GOspecies(
 
 \item{saveGraph}{logical, if \code{TRUE} the function will allow save the graph in graphml format}
 
-\item{option}{(values: 1 or 2). This option allows create either a graph 
+\item{option}{(values: 1 or 2). This option allows create either a graph
 where nodes are GO terms and edges are features and species are edges arributes or
 a graph where nodes are GO terms and edges are species belonging  (default value=2).}
+
+\item{numCores}{numeric, Number of cores to use for the process (default value numCores=2)}
 
 \item{outdir}{This parameter will allow save the graph file in a folder described here (e.g: "D:").This parameter only
 works when saveGraph=TRUE}
@@ -53,6 +56,7 @@ x_graph <- graph_two_GOspecies(x=comparison_example,
           species1=species1,
           species2=species2,
           GOterm_field=GOterm_field,
+          numCores=2,
           saveGraph = FALSE,
           option=1,
           outdir = NULL)

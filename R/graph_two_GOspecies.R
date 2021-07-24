@@ -9,9 +9,10 @@
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional_Category")
 #' @param species1 This is a string with the species name for the species 1 (e.g; "H. sapiens")
 #' @param species2 This is a string with the species name for the species 2 (e.g; "A. thaliana")
-#' @param option  (values: 1 or 2). This option allows create either a graph 
+#' @param option  (values: 1 or 2). This option allows create either a graph
 #'  where nodes are GO terms and edges are features and species are edges arributes or
 #'  a graph where nodes are GO terms and edges are species belonging  (default value=2).
+#' @param numCores numeric, Number of cores to use for the process (default value numCores=2)
 #' @param saveGraph logical, if \code{TRUE} the function will allow save the graph in graphml format
 #' @param outdir This parameter will allow save the graph file in a folder described here (e.g: "D:").This parameter only
 #'  works when saveGraph=TRUE
@@ -26,13 +27,16 @@
 #'           species1=species1,
 #'           species2=species2,
 #'           GOterm_field=GOterm_field,
+#'           numCores=2,
 #'           saveGraph = FALSE,
 #'           option=1,
 #'           outdir = NULL)
 #' head(x_graph)
 #' @return This function will return a table representing an edge list
 #' @importFrom utils combn setTxtProgressBar txtProgressBar
+#' @importFrom parallel makeCluster parLapply stopCluster detectCores
 #' @importFrom igraph graph_from_data_frame write.graph
+#'
 #' @export
 
 graph_two_GOspecies <-
@@ -42,7 +46,12 @@ graph_two_GOspecies <-
            GOterm_field,
            saveGraph = FALSE,
            option = 2,
+           numCores=2,
            outdir = NULL) {
+
+    x_det <- NULL
+    x_det <- parallel::detectCores()
+
     join_db <- rbind(x$shared_GO_list, x$unique_GO_list)
     GO_list <- unique(join_db$GO)
     unique_sp <- unique(join_db$species)
@@ -55,19 +64,23 @@ graph_two_GOspecies <-
       stop("Please add a valid pathway to save your graph")
     }
 
+    if (numCores > x_det) {
+      stop("Number of cores exceed the maximum allowed by the machine, use a coherent number of cores such as four")
+    }
 
     if (option == 1) {
+
       message("Using GO terms and species as edges")
-      pb <- utils::txtProgressBar(min = 0,
-                                  max = length(GO_list),
-                                  style = 3)
+
+      cl <- parallel::makeCluster(numCores)
+      parallel::clusterExport(cl, varlist=c("GO_list","join_db","species1","species2"),envir=environment())
 
 
 
-      graph_db1 <- lapply(seq_len(length(GO_list)), function(i) {
-        utils::setTxtProgressBar(pb, i)
 
-
+      graph_db1 <- parallel::parLapply (cl,
+                                        X = seq_len(length(GO_list)),
+                                        fun = function (i){
         x_shared <-
           join_db[which(join_db$GO == GO_list[[i]] &
                           join_db$species == "Shared"),]
@@ -152,53 +165,83 @@ graph_two_GOspecies <-
         }
         colnames(x_noshared_2) <-
           c("SOURCE", "TARGET", "FEATURE", "SP")
-
-
-        #x_shared$i <- i ###
-        #x_noshared_1$i <- i ###
-        #x_noshared_2$i <- i ###
-
-
-
         x_final <- rbind(x_shared, x_noshared_1, x_noshared_2)
         x_final <- x_final[which(!is.na(x_final$SP)),]
-
-        return(x_final)
       })
 
-      close(pb)
+      parallel::stopCluster(cl)
+
+
       graph_db1 <- as.data.frame(do.call(rbind, graph_db1))
       graph_db1 <-
-        graph_db1[which(graph_db1$SOURCE != "character(0)"),]
+      graph_db1[which(graph_db1$SOURCE != "character(0)"),]
+      graph_db1 <- graph_db1[which(graph_db1$FEATURE %in% GO_list),]
+
       graph_db1$SOURCE <- as.character(graph_db1$SOURCE)
       graph_db1$TARGET <- as.character(graph_db1$TARGET)
-      return(graph_db1)
+      ##########################
+      opt <- unique(graph_db1[,c("SOURCE","TARGET")])
+      rm(cl)
+
+
+      message("Extracting edges weight")
+
+      cl <- parallel::makeCluster(numCores)
+      parallel::clusterExport(cl, varlist=c("GO_list","join_db","species1","species2","graph_db1","opt"),envir=environment())
+
+      res <- parallel::parLapply (cl,
+                                        X = seq_len(nrow(opt)),
+                                        fun = function (i){
+
+
+      x <- graph_db1[,c(3,4)][graph_db1$SOURCE %in% opt$SOURCE[[i]] &
+                graph_db1$TARGET %in% opt$TARGET[[i]],]
+      x_feat_count <- length(unique(x$FEATURE))
+      x_feat <- paste(x$FEATURE,
+                      collapse = ";")
+      x_df <- data.frame(SOURCE = opt$SOURCE[[i]],
+                      TARGET = opt$TARGET[[i]],
+                      FEATURES_N = x_feat_count,
+                      WEIGHT = round(x_feat_count/length(GO_list),3),
+                      FEATURES = x_feat,
+                      SP1=length(x$SP[which(x$SP==species1)]),
+                      SP2=length(x$SP[which(x$SP==species2)]),
+                      SHARED=length(x$SP[which(x$SP=="Shared")]),
+                      SHARED_WEIGHT=round((length(x$SP[which(x$SP=="Shared")])/x_feat_count),3))
+
+    })
+      parallel::stopCluster(cl)
+      rm(cl)
+      res <- do.call(rbind,res)
+      colnames(res)[c(3,5)] <- c("GO_N","GO")
+
     } else {
       message("Using GO terms as nodes and species as edges")
-      pb <-
-        utils::txtProgressBar(min = 0,
-                              max = length(unique_sp),
-                              style = 3)
-      graph_db2 <- lapply(seq_len(length(unique_sp)), function(i) {
-        utils::setTxtProgressBar(pb, i)
-        x <-
-          unique(join_db$GO[which(join_db$species == unique_sp[[i]])])
-        x <- data.frame(t(combn(x, 2)), species = unique_sp[[i]])
-        colnames(x) <- c("SOURCE", "TARGET", "SP")
 
-        return(x)
-      })
+      cl <- parallel::makeCluster(numCores)
+      parallel::clusterExport(cl, varlist=c("unique_sp","join_db"),envir=environment())
 
-      close(pb)
+      graph_db2 <- parallel::parLapply (cl,
+                                      X = seq_len(length(unique_sp)),
+                                      fun = function (i){
+                                        x <- unique(join_db$GO[which(join_db$species == unique_sp[[i]])])
+                                        x <- data.frame(t(combn(x, 2)), species = unique_sp[[i]])
+                                      })
+      parallel::stopCluster(cl)
 
+      graph_db2 <- graph_db2[!sapply(graph_db2,is.null)]
       graph_db2 <- do.call(rbind, graph_db2)
-      return(graph_db2)
-    }
-    ############################################################################
-    ###########################################################################
+      colnames(graph_db2) <- c("SOURCE", "TARGET", "SP")
+      graph_db2 <- graph_db2[graph_db2$SP %in%unique_sp,]
+
+      rm(cl)
+}
+
     if (isTRUE(saveGraph)) {
+
+
       if (isTRUE(option == 1)) {
-        x1 <- igraph::graph_from_data_frame(graph_db1, directed = FALSE)
+        x1 <- igraph::graph_from_data_frame(res, directed = FALSE)
         igraph::write.graph(
           x1,
           file = paste0(outdir, "/", "comparison_option1.graphml"),
@@ -213,4 +256,11 @@ graph_two_GOspecies <-
         )
       }
     }
-  }
+
+    if(option==1){
+      return(res)
+    } else {
+      return(graph_db2)
+      }
+    }
+
