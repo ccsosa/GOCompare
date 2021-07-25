@@ -57,8 +57,7 @@ Response to external biotic stimulus  | DCE
 
 
 ### Workflow
-The recommended workflow is as follows:
-
+An example of how to use this package is provided below:
 
 ```r
 
@@ -92,7 +91,7 @@ x_unique <- as.list(unique(na.omit(x[,i])))
 x_Hsap <- do.call(rbind,x_Hsap)
 
 
- #Running function
+ #Running function to get graph of a list of features and GO terms
  x <- graphGOspecies(df=x_Hsap,
                       GOterm_field="term_name",
                       option = 2,
