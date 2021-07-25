@@ -74,10 +74,14 @@ CH <- c("AID","AIM","DCE","ERI","EGS","GIM","IA","RCD","SPS","TPI")
 
 x_Hsap <- list()
 
+pb <- utils::txtProgressBar(min = 0,
+                            max = length(CH),
+                            style = 3)
 for(i in seq_len(length(CH))){
-
-x_unique <- as.list(unique(na.omit(x[,i])))
- x_s <-  gprofiler2::gost(query = x_unique,
+        utils::setTxtProgressBar(pb, i)
+        x_unique <- as.list(unique(na.omit(x[,i])))
+        x_s <-  gprofiler2::gost(
+               query = x_unique,
                organism = "hsapiens", ordered_query = FALSE,
                multi_query = FALSE, significant = TRUE, exclude_iea = FALSE,
                measure_underrepresentation = FALSE, evcodes = FALSE,
@@ -86,7 +90,8 @@ x_unique <- as.list(unique(na.omit(x[,i])))
                numeric_ns = "", sources = NULL, as_short_link = FALSE)$res
  x_s$feature <- CH[[i]]
  x_Hsap[[i]] <- x_s
-}
+ }
+ close(pb)
 
 x_Hsap <- do.call(rbind,x_Hsap)
 
