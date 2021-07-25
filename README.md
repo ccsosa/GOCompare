@@ -60,6 +60,50 @@ Response to external biotic stimulus  | DCE
 The recommended workflow is as follows:
 
 
+```r
+
+require(gprofiler2)
+
+
+
+url_file = "https://raw.githubusercontent.com/ccsosa/R_Examples/master/Hallmarks_of_Cancer_AT.csv"
+x <- read.csv(url_file)
+x[,1] <- NULL
+CH <- c("AID","AIM","DCE","ERI","EGS","GIM","IA","RCD","SPS","TPI")
+
+
+
+x_Hsap <- list()
+
+for(i in seq_len(length(CH))){
+
+x_unique <- as.list(unique(na.omit(x[,i])))
+ x_s <-  gprofiler2::gost(query = x_unique,
+               organism = "hsapiens", ordered_query = FALSE,
+               multi_query = FALSE, significant = TRUE, exclude_iea = FALSE,
+               measure_underrepresentation = FALSE, evcodes = FALSE,
+               user_threshold = 0.05, correction_method = "g_SCS",
+               domain_scope = "annotated", custom_bg = NULL,
+               numeric_ns = "", sources = NULL, as_short_link = FALSE)$res
+ x_s$feature <- CH[[i]]
+ x_Hsap[[i]] <- x_s
+}
+
+x_Hsap <- do.call(rbind,x_Hsap)
+
+
+ #Running function
+ x <- graphGOspecies(df=x_Hsap,
+                      GOterm_field="term_name",
+                      option = 2,
+                      numCores=14,
+                      saveGraph=TRUE,
+                      outdir = "D:/ASH")
+ 
+ x
+ #Displaying results' head(x)
+```
+
 ## Authors
 Main:Chrystian C. Sosa, Diana Carolina Clavijo-Buriticá, Mauricio Quimbaya
 
