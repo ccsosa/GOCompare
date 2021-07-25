@@ -109,8 +109,6 @@ graphGOspecies <- function(df, GOterm_field, option = 2, numCores=2,saveGraph = 
 
 
     rm(option1)
-    return(res)
-
 
   } else {
 
@@ -166,13 +164,9 @@ graphGOspecies <- function(df, GOterm_field, option = 2, numCores=2,saveGraph = 
     parallel::stopCluster(cl)
     res <- do.call(rbind,res)
     rm(option2)
-    return(res)
   }
 
   if (isTRUE(saveGraph)) {
-
-
-    colnames(x_att) <- c("feature","GO_count")
     if (isTRUE(option == 1)) {
       x1 <- igraph::graph_from_data_frame(res, directed = FALSE,vertices = x_att)
       igraph::write.graph(x1,
@@ -180,6 +174,7 @@ graphGOspecies <- function(df, GOterm_field, option = 2, numCores=2,saveGraph = 
                   format = "graphml")
     } else {
       x_att <- stats::aggregate(list(df[,GOterm_field]),list(df$feature),function(i){length(unique(i))})
+      colnames(x_att) <- c("feature","GO_count")
       x2 <- igraph::graph_from_data_frame(res, directed = FALSE,vertices = x_att)
       igraph::write.graph(x2,
                   file = paste0(outdir, "/", "option2.graphml"),
@@ -187,4 +182,5 @@ graphGOspecies <- function(df, GOterm_field, option = 2, numCores=2,saveGraph = 
     }
   }
 
+    return(res)
 }

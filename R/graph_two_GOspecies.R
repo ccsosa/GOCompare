@@ -81,100 +81,100 @@ graph_two_GOspecies <-
       graph_db1 <- parallel::parLapply (cl,
                                         X = seq_len(length(GO_list)),
                                         fun = function (i){
-        x_shared <-
-          join_db[which(join_db$GO == GO_list[[i]] &
-                          join_db$species == "Shared"),]
+                                          x_shared <-
+                                            join_db[which(join_db$GO == GO_list[[i]] &
+                                                            join_db$species == "Shared"),]
 
-        if (nrow(x_shared) == 1) {
-          x_shared <-
-            data.frame(
-              SOURCE = x_shared$feature,
-              TARGET = x_shared$feature,
-              GO = GO_list[[i]],
-              species = "Shared"
-            )
-        } else if (nrow(x_shared) > 1) {
-          x_shared <-
-            data.frame(t(utils::combn(x_shared$feature, 2)), GO = GO_list[[i]], species =
-                         "Shared")
-        } else {
-          x_shared <-  data.frame(
-            SOURCE = NA,
-            TARGET = NA,
-            FEATURE = NA,
-            SP = NA
-          )
-        }
-        colnames(x_shared) <- c("SOURCE", "TARGET", "FEATURE", "SP")
-
-
-        x_noshared <-
-          join_db[which(join_db$GO == GO_list[[i]] &
-                          join_db$species != "Shared"),]
-
-        x_noshared_1 <-
-          x_noshared[which(x_noshared$species == species1),]
-        x_noshared_2 <-
-          x_noshared[which(x_noshared$species == species2),]
+                                          if (nrow(x_shared) == 1) {
+                                            x_shared <-
+                                              data.frame(
+                                                SOURCE = x_shared$feature,
+                                                TARGET = x_shared$feature,
+                                                GO = GO_list[[i]],
+                                                species = "Shared"
+                                              )
+                                          } else if (nrow(x_shared) > 1) {
+                                            x_shared <-
+                                              data.frame(t(utils::combn(x_shared$feature, 2)), GO = GO_list[[i]], species =
+                                                           "Shared")
+                                          } else {
+                                            x_shared <-  data.frame(
+                                              SOURCE = NA,
+                                              TARGET = NA,
+                                              FEATURE = NA,
+                                              SP = NA
+                                            )
+                                          }
+                                          colnames(x_shared) <- c("SOURCE", "TARGET", "FEATURE", "SP")
 
 
-        if (nrow(x_noshared_1) == 1) {
-          x_noshared_1 <-
-            data.frame(
-              SOURCE = x_noshared_1$feature,
-              TARGET = x_noshared_1$feature,
-              GO = GO_list[[i]],
-              species = species1
-            )
-        } else if (nrow(x_noshared_1) > 1) {
-          x_noshared_1 <-
-            data.frame(t(utils::combn(x_noshared_1$feature, 2)), GO = GO_list[[i]], species =
-                         species1)
-        } else {
-          x_noshared_1 <-  data.frame(
-            SOURCE = NA,
-            TARGET = NA,
-            FEATURE = NA,
-            SP = NA
-          )
+                                          x_noshared <-
+                                            join_db[which(join_db$GO == GO_list[[i]] &
+                                                            join_db$species != "Shared"),]
 
-        }
-        colnames(x_noshared_1) <-
-          c("SOURCE", "TARGET", "FEATURE", "SP")
+                                          x_noshared_1 <-
+                                            x_noshared[which(x_noshared$species == species1),]
+                                          x_noshared_2 <-
+                                            x_noshared[which(x_noshared$species == species2),]
 
-        if (nrow(x_noshared_2) == 1) {
-          x_noshared_2 <-
-            data.frame(
-              SOURCE = x_noshared_2$feature,
-              TARGET = x_noshared_2$feature,
-              GO = GO_list[[i]],
-              species = species2
-            )
-          colnames(x_noshared_2) <-
-            c("SOURCE", "TARGET", "FEATURE", "SP")
-        } else if (nrow(x_noshared_2) > 1) {
-          x_noshared_2 <-
-            data.frame(t(utils::combn(x_noshared_2$feature, 2)), GO = GO_list[[i]], species = species2)
-        } else {
-          x_noshared_2 <-  data.frame(
-            SOURCE = NA,
-            TARGET = NA,
-            FEATURE = NA,
-            SP = NA
-          )
-        }
-        colnames(x_noshared_2) <-
-          c("SOURCE", "TARGET", "FEATURE", "SP")
-        x_final <- rbind(x_shared, x_noshared_1, x_noshared_2)
-        x_final <- x_final[which(!is.na(x_final$SP)),]
-      })
+
+                                          if (nrow(x_noshared_1) == 1) {
+                                            x_noshared_1 <-
+                                              data.frame(
+                                                SOURCE = x_noshared_1$feature,
+                                                TARGET = x_noshared_1$feature,
+                                                GO = GO_list[[i]],
+                                                species = species1
+                                              )
+                                          } else if (nrow(x_noshared_1) > 1) {
+                                            x_noshared_1 <-
+                                              data.frame(t(utils::combn(x_noshared_1$feature, 2)), GO = GO_list[[i]], species =
+                                                           species1)
+                                          } else {
+                                            x_noshared_1 <-  data.frame(
+                                              SOURCE = NA,
+                                              TARGET = NA,
+                                              FEATURE = NA,
+                                              SP = NA
+                                            )
+
+                                          }
+                                          colnames(x_noshared_1) <-
+                                            c("SOURCE", "TARGET", "FEATURE", "SP")
+
+                                          if (nrow(x_noshared_2) == 1) {
+                                            x_noshared_2 <-
+                                              data.frame(
+                                                SOURCE = x_noshared_2$feature,
+                                                TARGET = x_noshared_2$feature,
+                                                GO = GO_list[[i]],
+                                                species = species2
+                                              )
+                                            colnames(x_noshared_2) <-
+                                              c("SOURCE", "TARGET", "FEATURE", "SP")
+                                          } else if (nrow(x_noshared_2) > 1) {
+                                            x_noshared_2 <-
+                                              data.frame(t(utils::combn(x_noshared_2$feature, 2)), GO = GO_list[[i]], species = species2)
+                                          } else {
+                                            x_noshared_2 <-  data.frame(
+                                              SOURCE = NA,
+                                              TARGET = NA,
+                                              FEATURE = NA,
+                                              SP = NA
+                                            )
+                                          }
+                                          colnames(x_noshared_2) <-
+                                            c("SOURCE", "TARGET", "FEATURE", "SP")
+                                          x_final <- rbind(x_shared, x_noshared_1, x_noshared_2)
+                                          x_final <- x_final[which(!is.na(x_final$SP)),]
+                                        })
 
       parallel::stopCluster(cl)
 
 
       graph_db1 <- as.data.frame(do.call(rbind, graph_db1))
       graph_db1 <-
-      graph_db1[which(graph_db1$SOURCE != "character(0)"),]
+        graph_db1[which(graph_db1$SOURCE != "character(0)"),]
       graph_db1 <- graph_db1[which(graph_db1$FEATURE %in% GO_list),]
 
       graph_db1$SOURCE <- as.character(graph_db1$SOURCE)
@@ -190,26 +190,26 @@ graph_two_GOspecies <-
       parallel::clusterExport(cl, varlist=c("GO_list","join_db","species1","species2","graph_db1","opt"),envir=environment())
 
       res <- parallel::parLapply (cl,
-                                        X = seq_len(nrow(opt)),
-                                        fun = function (i){
+                                  X = seq_len(nrow(opt)),
+                                  fun = function (i){
 
 
-      x <- graph_db1[,c(3,4)][graph_db1$SOURCE %in% opt$SOURCE[[i]] &
-                graph_db1$TARGET %in% opt$TARGET[[i]],]
-      x_feat_count <- length(unique(x$FEATURE))
-      x_feat <- paste(x$FEATURE,
-                      collapse = ";")
-      x_df <- data.frame(SOURCE = opt$SOURCE[[i]],
-                      TARGET = opt$TARGET[[i]],
-                      FEATURES_N = x_feat_count,
-                      WEIGHT = round(x_feat_count/length(GO_list),3),
-                      FEATURES = x_feat,
-                      SP1=length(x$SP[which(x$SP==species1)]),
-                      SP2=length(x$SP[which(x$SP==species2)]),
-                      SHARED=length(x$SP[which(x$SP=="Shared")]),
-                      SHARED_WEIGHT=round((length(x$SP[which(x$SP=="Shared")])/x_feat_count),3))
+                                    x <- graph_db1[,c(3,4)][graph_db1$SOURCE %in% opt$SOURCE[[i]] &
+                                                              graph_db1$TARGET %in% opt$TARGET[[i]],]
+                                    x_feat_count <- length(unique(x$FEATURE))
+                                    x_feat <- paste(x$FEATURE,
+                                                    collapse = ";")
+                                    x_df <- data.frame(SOURCE = opt$SOURCE[[i]],
+                                                       TARGET = opt$TARGET[[i]],
+                                                       FEATURES_N = x_feat_count,
+                                                       WEIGHT = round(x_feat_count/length(GO_list),3),
+                                                       FEATURES = x_feat,
+                                                       SP1=length(x$SP[which(x$SP==species1)]),
+                                                       SP2=length(x$SP[which(x$SP==species2)]),
+                                                       SHARED=length(x$SP[which(x$SP=="Shared")]),
+                                                       SHARED_WEIGHT=round((length(x$SP[which(x$SP=="Shared")])/x_feat_count),3))
 
-    })
+                                  })
       parallel::stopCluster(cl)
       rm(cl)
       res <- do.call(rbind,res)
@@ -222,11 +222,11 @@ graph_two_GOspecies <-
       parallel::clusterExport(cl, varlist=c("unique_sp","join_db"),envir=environment())
 
       graph_db2 <- parallel::parLapply (cl,
-                                      X = seq_len(length(unique_sp)),
-                                      fun = function (i){
-                                        x <- unique(join_db$GO[which(join_db$species == unique_sp[[i]])])
-                                        x <- data.frame(t(combn(x, 2)), species = unique_sp[[i]])
-                                      })
+                                        X = seq_len(length(unique_sp)),
+                                        fun = function (i){
+                                          x <- unique(join_db$GO[which(join_db$species == unique_sp[[i]])])
+                                          x <- data.frame(t(combn(x, 2)), species = unique_sp[[i]])
+                                        })
       parallel::stopCluster(cl)
 
       graph_db2 <- graph_db2[!sapply(graph_db2,is.null)]
@@ -235,11 +235,9 @@ graph_two_GOspecies <-
       graph_db2 <- graph_db2[graph_db2$SP %in%unique_sp,]
 
       rm(cl)
-}
+    }
 
     if (isTRUE(saveGraph)) {
-
-
       if (isTRUE(option == 1)) {
         x1 <- igraph::graph_from_data_frame(res, directed = FALSE)
         igraph::write.graph(
@@ -261,6 +259,6 @@ graph_two_GOspecies <-
       return(res)
     } else {
       return(graph_db2)
-      }
     }
+  }
 
