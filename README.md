@@ -94,7 +94,7 @@ x <- graphGOspecies(df=x_s$result,
                     GOterm_field="term_name",
                     option = 2,
                     numCores=6,
-                    saveGraph=TRUE,
+                    saveGraph=FALSE,
                     outdir = NULL)
 
 x
