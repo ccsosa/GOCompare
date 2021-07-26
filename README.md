@@ -90,7 +90,7 @@ colnames(x_s$result)[1] <- "feature"
 
 #Running function to get graph of a list of features and GO terms
 
-x <- graphGOspecies(df=x_s$result,
+x <- GOCompare::graphGOspecies(df=x_s$result,
                     GOterm_field="term_name",
                     option = 2,
                     numCores=6,
