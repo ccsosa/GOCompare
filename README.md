@@ -63,49 +63,42 @@ An example of how to use this package is provided below:
 
 require(gprofiler2)
 
-
-
 url_file = "https://raw.githubusercontent.com/ccsosa/R_Examples/master/Hallmarks_of_Cancer_AT.csv"
 x <- read.csv(url_file)
 x[,1] <- NULL
 CH <- c("AID","AIM","DCE","ERI","EGS","GIM","IA","RCD","SPS","TPI")
 
 
+x_Hsap <- lapply(seq_len(length(CH)), function(i){
+  x_unique <- unique(na.omit(x[,i]))
+  x_unique <- x_unique[which(x_unique!="")]
+  x_unique <- as.list(x_unique)
+  return(x_unique)
+})
 
-x_Hsap <- list()
+names(x_Hsap) <- CH
 
-pb <- utils::txtProgressBar(min = 0,
-                            max = length(CH),
-                            style = 3)
-for(i in seq_len(length(CH))){
-        utils::setTxtProgressBar(pb, i)
-        x_unique <- as.list(unique(na.omit(x[,i])))
-        x_s <-  gprofiler2::gost(
-               query = x_unique,
-               organism = "hsapiens", ordered_query = FALSE,
-               multi_query = FALSE, significant = TRUE, exclude_iea = FALSE,
-               measure_underrepresentation = FALSE, evcodes = FALSE,
-               user_threshold = 0.05, correction_method = "g_SCS",
-               domain_scope = "annotated", custom_bg = NULL,
-               numeric_ns = "", sources = NULL, as_short_link = FALSE)$res
- x_s$feature <- CH[[i]]
- x_Hsap[[i]] <- x_s
- }
- close(pb)
+  x_s <-  gprofiler2::gost(query = x_Hsap,
+                           organism = "hsapiens", ordered_query = FALSE,
+                           multi_query = FALSE, significant = TRUE, exclude_iea = FALSE,
+                           measure_underrepresentation = FALSE, evcodes = FALSE,
+                           user_threshold = 0.05, correction_method = "g_SCS",
+                           domain_scope = "annotated", custom_bg = NULL,
+                           numeric_ns = "", sources = NULL, as_short_link = FALSE)
 
-x_Hsap <- do.call(rbind,x_Hsap)
+colnames(x_s$result)[1] <- "feature"
 
+#Running function to get graph of a list of features and GO terms
 
- #Running function to get graph of a list of features and GO terms
- x <- graphGOspecies(df=x_Hsap,
-                      GOterm_field="term_name",
-                      option = 2,
-                      numCores=14,
-                      saveGraph=TRUE,
-                      outdir = "D:/ASH")
- 
- x
- #Displaying results' head(x)
+x <- graphGOspecies(df=x_s$result,
+                    GOterm_field="term_name",
+                    option = 2,
+                    numCores=6,
+                    saveGraph=TRUE,
+                    outdir = NULL)
+
+x
+
 ```
 
 ## Authors
