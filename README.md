@@ -1,4 +1,4 @@
-# GOCompare R package
+# GOCompare R package (In development)
 
 ## Description
 
