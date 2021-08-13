@@ -43,11 +43,11 @@ such as weights and collapsed in a column called FEATURES
 \examples{
 
 #Loading example datasets
-data(H_sapiens)
+data(H_sapiens_compress)
 #Defining the column with the GO terms to be compared
 GOterm_field <- "Functional_Category"
 #Running function
-x <- graphGOspecies(df=H_sapiens,
+x <- graphGOspecies(df=H_sapiens_compress,
                      GOterm_field=GOterm_field,
                      option = 2,
                      numCores=2,

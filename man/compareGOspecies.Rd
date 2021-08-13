@@ -2,7 +2,7 @@
 % Please edit documentation in R/compareGOspecies.R
 \name{compareGOspecies}
 \alias{compareGOspecies}
-\title{Comprehensive visual and graph comparison between two species and 
+\title{Comprehensive visual and graph comparison between two species and
  a series of categories}
 \usage{
 compareGOspecies(df1, df2, GOterm_field, species1, species2)
@@ -27,7 +27,7 @@ This function will return a list with four slots: graphics, distance shared_GO_l
 compareGOspecies provides a simple workflow to compare results
  of functional enrichment analysis
  for two species and a column which represent features to be compared.
- This function will extract the unique GO terms for two matrices matrices 
+ This function will extract the unique GO terms for two matrices matrices
  provided and will generate a presence-absence matrix where rows will represent
  a combination of categories and species(e.g H.sapies AID) and columns will be
  the GO terms analyzed.Further, this code will calculate Jaccard distances and

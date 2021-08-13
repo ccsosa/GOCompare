@@ -1,10 +1,10 @@
-#' @title Comprehensive visual and graph comparison between two species and 
+#' @title Comprehensive visual and graph comparison between two species and
 #'  a series of categories
 #' @name compareGOspecies
 #' @description compareGOspecies provides a simple workflow to compare results
 #'  of functional enrichment analysis
 #'  for two species and a column which represent features to be compared.
-#'  This function will extract the unique GO terms for two matrices matrices 
+#'  This function will extract the unique GO terms for two matrices matrices
 #'  provided and will generate a presence-absence matrix where rows will represent
 #'  a combination of categories and species(e.g H.sapies AID) and columns will be
 #'  the GO terms analyzed.Further, this code will calculate Jaccard distances and

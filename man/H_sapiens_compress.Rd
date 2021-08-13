@@ -23,7 +23,7 @@ A data frame with 2000 rows and 6 variables:
 H_sapiens_compress
 }
 \description{
-This dataset is a subset of the original dataset obtained 
+This dataset is a subset of the original dataset obtained
 for Clavijo-Buriticá (In preparation)
 }
 \references{

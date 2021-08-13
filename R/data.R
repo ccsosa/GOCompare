@@ -25,7 +25,7 @@
 #'  "AID","DCE","RCD","SPS" cancer-hallmarks
 #' @name H_sapiens_compress
 #' @docType data
-#' @description This dataset is a subset of the original dataset obtained 
+#' @description This dataset is a subset of the original dataset obtained
 #' for Clavijo-Buriticá (In preparation)
 #' @format A data frame with 2000 rows and 6 variables:
 #' \describe{
@@ -88,7 +88,8 @@
 "H_sapiens"
 
 #' @title Functional enrichment analysis comparison between H. sapiens and A. thaliana
-#' @name comparison_example
+#' for "AID","DCE","RCD","SPS" cancer-hallmarks
+#' @name comparison_ex_compress
 #' @docType data
 #' @description This dataset is the results of running the compareGOspecies species and
 #'  it is composed of four slots:
@@ -104,4 +105,4 @@
 #' between plants and humans reveals Arabidopsis thaliana as a useful model to understand
 #' specific carcinogenic events (to be submitted, Target journal: Plos Biology)
 #' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
-"comparison_example"
+"comparison_ex_compress"

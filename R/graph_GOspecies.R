@@ -19,11 +19,11 @@
 #' @examples
 #'
 #' #Loading example datasets
-#' data(H_sapiens)
+#' data(H_sapiens_compress)
 #' #Defining the column with the GO terms to be compared
 #' GOterm_field <- "Functional_Category"
 #' #Running function
-#' x <- graphGOspecies(df=H_sapiens,
+#' x <- graphGOspecies(df=H_sapiens_compress,
 #'                      GOterm_field=GOterm_field,
 #'                      option = 2,
 #'                      numCores=2,
@@ -49,6 +49,10 @@ graphGOspecies <- function(df, GOterm_field, option = 2, numCores=2,saveGraph = 
     stop("Please add a valid path to save your graph")
   }
 
+  if (isFALSE(saveGraph) & !is.null(outdir)) {
+    stop("Please select saveGraph=TRUE to save your graph")
+  }
+
   if (numCores > x_det) {
     stop("Number of cores exceed the maximum allowed by the machine, use a coherent number of cores such as four")
   }
@@ -62,6 +66,26 @@ graphGOspecies <- function(df, GOterm_field, option = 2, numCores=2,saveGraph = 
   if (isTRUE(option == 1)) {
     message("Using features as edges (This will take a long time)")
 
+
+
+
+    #FILTERING BY MORE THAN ONE CATEGORY
+    # cl <- parallel::makeCluster(numCores)
+    # parallel::clusterExport(cl, varlist=c("GO_list","df","GOterm_field"),envir=environment())
+    #
+    #
+    #
+    # GO_x <- parallel::parLapply (cl,
+    #                                 X = seq_len(length(GO_list)),
+    #                                 fun = function (i){
+    #                                   x <- df$feature[which(df[, GOterm_field]==GO_list[[i]])]
+    #                                   data.frame(GO=GO_list[[i]],FREQ=length(x))
+    #                                 })
+    # parallel::stopCluster(cl)
+    # GO_x <- do.call(rbind,GO_x)
+    # GO_list <- GO_x$GO[which(GO_x$FREQ>1)]
+    # df <- df[(df[,GOterm_field] %in% GO_list),]
+    #
     cl <- parallel::makeCluster(numCores)
     parallel::clusterExport(cl, varlist=c("features_list","df","GOterm_field"),envir=environment())
 
@@ -80,35 +104,22 @@ graphGOspecies <- function(df, GOterm_field, option = 2, numCores=2,saveGraph = 
     colnames(option1) <- c("SOURCE", "TARGET", "FEATURE")
     option1 <- option1[option1$FEATURE %in%features_list,]
 
-   rm(cl)
+    rm(cl)
 
     message("Extracting edge weights")
 
-    opt <- unique(option1[,c("SOURCE","TARGET")])
+    #opt <- unique(option1[,c("SOURCE","TARGET")])
 
+    x <-  aggregate(FEATURE ~ paste(SOURCE," @ ",TARGET)  , data = option1, length)
+    x_names <- strsplit(x[,1],"@",fixed = FALSE)
+    x$SOURCE <- trimws(lapply(x_names, `[[`, 1))
+    x$TARGET <- trimws(lapply(x_names, `[[`, 2))
+    x <- x[,c("SOURCE","TARGET","FEATURE")]
+    x$WEIGHT <-x$FEATURE/length(GO_list)
 
-    cl <- parallel::makeCluster(numCores)
-    parallel::clusterExport(cl, varlist=c("option1","opt","features_list"),envir=environment())
+    res <- x
+    rm(x,option1)
 
-    res <- parallel::parLapply (cl,
-                      X = seq_len(nrow(opt)),
-                      fun = function (i){
-                        x_feat <- paste(option1$FEATURE[option1$SOURCE %in% opt[i,1] &
-                                               option1$TARGET %in% opt[i,2]],
-                                  collapse = ";")
-                      x_feat_count <- (stringr::str_count(x_feat,";")+1)/length(features_list)
-                      data.frame(SOURCE = opt$SOURCE[[i]],
-                                 TARGET = opt$TARGET[[i]],
-                        FEATURES = x_feat,
-                        WEIGHT = round(x_feat_count,3))
-
-                        })
-        parallel::stopCluster(cl)
-
-        res <- do.call(rbind,res)
-
-
-    rm(option1)
 
   } else {
 
@@ -121,16 +132,16 @@ graphGOspecies <- function(df, GOterm_field, option = 2, numCores=2,saveGraph = 
     parallel::clusterExport(cl, varlist=c("GOterm_field","GO_list","df"),envir=environment())
 
     option2 <- parallel::parLapply (cl,
-                                X = seq_len(length(GO_list)),
-                                fun = function (i){
-                                  x <- df$feature[which(df[, GOterm_field] == GO_list[[i]])]
-                                  if (length(x) > 1) {
+                                    X = seq_len(length(GO_list)),
+                                    fun = function (i){
+                                      x <- df$feature[which(df[, GOterm_field] == GO_list[[i]])]
+                                      if (length(x) > 1) {
 
-                                    x <- data.frame(t(utils::combn(x, 2)), GO = GO_list[[i]])
+                                        x <- data.frame(t(utils::combn(x, 2)), GO = GO_list[[i]])
 
-                                  }
+                                      }
 
-                                })
+                                    })
 
     parallel::stopCluster(cl)
 
@@ -147,20 +158,20 @@ graphGOspecies <- function(df, GOterm_field, option = 2, numCores=2,saveGraph = 
     parallel::clusterExport(cl, varlist=c("option2","GO_list","opt"),envir=environment())
 
     res <- parallel::parLapply(cl,
-                                 X = seq_len(nrow(opt)),
-                                 fun = function (i){
-                                  x_feat <- paste(option2$GO[option2$SOURCE %in% opt[i,1] &
-                                                               option2$TARGET %in% opt[i,2]],
-                                                  collapse = ";")
-                                  x_feat_count <- (stringr::str_count(x_feat,";")+1)
-                                  x <- data.frame(SOURCE = opt$SOURCE[[i]],
-                                             TARGET = opt$TARGET[[i]],
-                                             FEATURES_N = x_feat_count,
-                                             WEIGHT = round(x_feat_count/length(GO_list),3),
-                                             FEATURES = x_feat
-                                  )
+                               X = seq_len(nrow(opt)),
+                               fun = function (i){
+                                 x_feat <- paste(option2$GO[option2$SOURCE %in% opt[i,1] &
+                                                              option2$TARGET %in% opt[i,2]],
+                                                 collapse = ";")
+                                 x_feat_count <- (stringr::str_count(x_feat,";")+1)
+                                 x <- data.frame(SOURCE = opt$SOURCE[[i]],
+                                                 TARGET = opt$TARGET[[i]],
+                                                 FEATURES_N = x_feat_count,
+                                                 WEIGHT = round(x_feat_count/length(GO_list),3),
+                                                 FEATURES = x_feat
+                                 )
 
-                                 })
+                               })
     parallel::stopCluster(cl)
     res <- do.call(rbind,res)
     rm(option2)
@@ -168,19 +179,42 @@ graphGOspecies <- function(df, GOterm_field, option = 2, numCores=2,saveGraph = 
 
   if (isTRUE(saveGraph)) {
     if (isTRUE(option == 1)) {
+
+      cl <- parallel::makeCluster(numCores)
+      parallel::clusterExport(cl, varlist=c("GO_list","res"),envir=environment())
+      x_att <- parallel::parLapply(cl,
+                                   X = seq_len(length(GO_list)),
+                                   fun = function (i){
+                                     x <-res[res$SOURCE %in%  trimws(GO_list[[i]]) | res$TARGET %in%  trimws(GO_list[[i]]),]
+
+                                     x <- data.frame(GO = trimws(GO_list[[i]]),
+                                                     GO_WEIGHT = sum(x$WEIGHT)
+
+                                     )
+
+                                   })
+      parallel::stopCluster(cl)
+
+      x_att <- do.call(rbind,x_att)
+
+      #x_att <- stats::aggregate(list(res$WEIGHT),list(unique(c(res$SOURCE,res$TARGET))),sum)
+      colnames(x_att) <- c("GO","GO_WEIGHT")
+      message(paste("saving ",paste0(outdir, "/", "option1.graphml")))
       x1 <- igraph::graph_from_data_frame(res, directed = FALSE,vertices = x_att)
       igraph::write.graph(x1,
-                  file = paste0(outdir, "/", "option1.graphml"),
-                  format = "graphml")
+                          file = paste0(outdir, "/", "option1.graphml"),
+                          format = "graphml")
     } else {
       x_att <- stats::aggregate(list(df[,GOterm_field]),list(df$feature),function(i){length(unique(i))})
       colnames(x_att) <- c("feature","GO_count")
       x2 <- igraph::graph_from_data_frame(res, directed = FALSE,vertices = x_att)
+      message(paste("saving ",paste0(outdir, "/", "option2.graphml")))
+
       igraph::write.graph(x2,
-                  file = paste0(outdir, "/", "option2.graphml"),
-                  format = "graphml")
+                          file = paste0(outdir, "/", "option2.graphml"),
+                          format = "graphml")
     }
   }
 
-    return(res)
+  return(res)
 }

@@ -19,17 +19,17 @@
 #' @examples
 #'
 #' GOterm_field <- "Functional_Category"
-#' data(comparison_example)
+#' data(comparison_ex_compress)
 #' #Defining the species names
 #' species1 <- "H. sapiens"
 #' species2 <- "A. thaliana"
-#' x_graph <- graph_two_GOspecies(x=comparison_example,
+#' x_graph <- graph_two_GOspecies(x=comparison_ex_compress,
 #'           species1=species1,
 #'           species2=species2,
 #'           GOterm_field=GOterm_field,
 #'           numCores=2,
 #'           saveGraph = FALSE,
-#'           option=1,
+#'           option= 1,
 #'           outdir = NULL)
 #' head(x_graph)
 #' @return This function will return a table representing an edge list
@@ -62,6 +62,10 @@ graph_two_GOspecies <-
 
     if (isTRUE(saveGraph) & is.null(outdir)) {
       stop("Please add a valid pathway to save your graph")
+    }
+
+    if (isFALSE(saveGraph) & !is.null(outdir)) {
+      stop("Please select saveGraph=TRUE to save your graph")
     }
 
     if (numCores > x_det) {
@@ -219,19 +223,36 @@ graph_two_GOspecies <-
       message("Using GO terms as nodes and species as edges")
 
       cl <- parallel::makeCluster(numCores)
-      parallel::clusterExport(cl, varlist=c("unique_sp","join_db"),envir=environment())
+      parallel::clusterExport(cl, varlist=c("unique_sp","join_db","species1","species2"),envir=environment())
 
       graph_db2 <- parallel::parLapply (cl,
                                         X = seq_len(length(unique_sp)),
                                         fun = function (i){
-                                          x <- unique(join_db$GO[which(join_db$species == unique_sp[[i]])])
-                                          x <- data.frame(t(combn(x, 2)), species = unique_sp[[i]])
+                                          x <- join_db[which(join_db$species == unique_sp[[i]]),]
+                                          x_GO <- unique(x$GO)
+                                          x_feat <- unique(x$feature)
+
+                                          x_i <- lapply(seq_len(length(x_feat)),function(j){
+                                            x <- data.frame(t(combn(x$GO[which(x$feature==x_feat[[j]])], 2)),
+                                                            feat =x_feat[[j]],
+                                                            species = unique_sp[[i]])
+                                            return(x)})
+                                          x_i <- do.call(rbind,x_i)
+                                          colnames(x_i) <- c("SOURCE", "TARGET","FEATURE", "SP")
+                                          x <-  aggregate(FEATURE ~ paste(SOURCE," @ ",TARGET)  , data = x_i, length)
+                                          x_names <- strsplit(x[,1],"@",fixed = FALSE)
+                                          x$SOURCE <- trimws(lapply(x_names, `[[`, 1))
+                                          x$TARGET <- trimws(lapply(x_names, `[[`, 2))
+                                          x <- x[,c("SOURCE","TARGET","FEATURE")]
+                                          x$SP <- unique_sp[[i]]
+                                          x$WEIGHT <-x$FEATURE/length(x_GO)
+                                          x <- x
                                         })
       parallel::stopCluster(cl)
 
       graph_db2 <- graph_db2[!sapply(graph_db2,is.null)]
       graph_db2 <- do.call(rbind, graph_db2)
-      colnames(graph_db2) <- c("SOURCE", "TARGET", "SP")
+      #colnames(graph_db2) <- c("SOURCE", "TARGET", "SP")
       graph_db2 <- graph_db2[graph_db2$SP %in%unique_sp,]
 
       rm(cl)
@@ -240,13 +261,33 @@ graph_two_GOspecies <-
     if (isTRUE(saveGraph)) {
       if (isTRUE(option == 1)) {
         x1 <- igraph::graph_from_data_frame(res, directed = FALSE)
+        message(paste("saving ",paste0(outdir, "/", "comparison_option1.graphml")))
+
         igraph::write.graph(
           x1,
           file = paste0(outdir, "/", "comparison_option1.graphml"),
           format = "graphml"
         )
       } else {
-        x2 <- igraph::graph_from_data_frame(graph_db2, directed = FALSE)
+
+        cl <- parallel::makeCluster(numCores)
+        parallel::clusterExport(cl, varlist=c("GO_list","graph_db2"),envir=environment())
+        x_att <- parallel::parLapply(cl,
+                                     X = seq_len(length(GO_list)),
+                                     fun = function (i){
+                                       x <-graph_db2[graph_db2$SOURCE %in%  trimws(GO_list[[i]]) | graph_db2$TARGET %in%  trimws(GO_list[[i]]),]
+
+                                       x <- data.frame(GO = trimws(GO_list[[i]]),
+                                                       GO_WEIGHT = sum(x$WEIGHT)
+
+                                       )
+
+                                     })
+        parallel::stopCluster(cl)
+
+        x_att <- do.call(rbind,x_att)
+        x2 <- igraph::graph_from_data_frame(graph_db2, directed = FALSE,vertices = x_att)
+        message(paste("saving ",paste0(outdir, "/", "comparison_option2.graphml")))
         igraph::write.graph(
           x2,
           file = paste0(outdir, "/", "comparison_option2.graphml"),

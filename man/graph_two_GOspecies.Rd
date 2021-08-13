@@ -48,17 +48,17 @@ graph_two_GOspecies is a function to create undirected graphs
 \examples{
 
 GOterm_field <- "Functional_Category"
-data(comparison_example)
+data(comparison_ex_compress)
 #Defining the species names
 species1 <- "H. sapiens"
 species2 <- "A. thaliana"
-x_graph <- graph_two_GOspecies(x=comparison_example,
+x_graph <- graph_two_GOspecies(x=comparison_ex_compress,
           species1=species1,
           species2=species2,
           GOterm_field=GOterm_field,
           numCores=2,
           saveGraph = FALSE,
-          option=1,
+          option= 1,
           outdir = NULL)
 head(x_graph)
 }
