@@ -13,11 +13,11 @@ for a species with an extra column "feature" with the features to be compared}
 \item{GOterm_field}{This is a string with the column name of the GO terms (e.g; "Functional.Category")}
 }
 \value{
-This function will return a table with the frequency of GO terms among a series of features
+This function will return a table with the frequency of GO terms per feature
 }
 \description{
 Provides an easy way to get the frequency of GO terms
- such as biological processes for a dataframe and a series of features.
+ such as biological processes for a data frame and a series of features.
 }
 \examples{
 

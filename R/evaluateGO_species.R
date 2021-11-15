@@ -1,8 +1,8 @@
 #' @title Comprehensive comparison between species using GO terms and Pearson's
 #'  Chi-squared Tests
 #' @name evaluateGO_species
-#' @description evaluateGO_species provides a simple workflow to compare results
-#'  of functional enrichment analysis for two species through the use Pearson's
+#' @description evaluateGO_species provides a simple function  to compare results
+#'  of functional enrichment analysis for two species through the use of Pearson's
 #'  Chi-squared Tests and a False discovery rate correction
 #'
 #' @param df1 A data frame with the results of a functional enrichment analysis
@@ -18,7 +18,7 @@
 #' \tabular{lcc}{
 #' GO \tab GO term analyzed \cr
 #' pvalue \tab p-value obtained through the use of Pearson's Chi-squared Test\cr
-#' FDR \tab Multiple comparison correction for the pvalue column \cr
+#' FDR \tab Multiple comparison correction for the p-value column \cr
 #' }
 #' @examples
 #'

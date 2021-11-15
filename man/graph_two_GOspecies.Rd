@@ -2,8 +2,8 @@
 % Please edit documentation in R/graph_two_GOspecies.R
 \name{graph_two_GOspecies}
 \alias{graph_two_GOspecies}
-\title{Comprehensive visual and graph comparison between two species and
- a series of categories}
+\title{Undirected network representation  for the results of functional
+ enrichment analysis to compare two species and a series of categories}
 \usage{
 graph_two_GOspecies(
   x,
@@ -11,25 +11,25 @@ graph_two_GOspecies(
   species2,
   GOterm_field,
   saveGraph = FALSE,
-  option = 2,
+  option = "Categories",
   numCores = 2,
   outdir = NULL
 )
 }
 \arguments{
-\item{x}{is a list of running the comparegOspecies species.}
+\item{x}{is a list obtained as output of the comparegOspecies function.}
 
-\item{species1}{This is a string with the species name for the species 1 (e.g; "H. sapiens")}
+\item{species1}{This is a string with the species name for species 1 (e.g; "H. sapiens")}
 
-\item{species2}{This is a string with the species name for the species 2 (e.g; "A. thaliana")}
+\item{species2}{This is a string with the species name for species 2 (e.g; "A. thaliana")}
 
 \item{GOterm_field}{This is a string with the column name of the GO terms (e.g; "Functional_Category")}
 
 \item{saveGraph}{logical, if \code{TRUE} the function will allow save the graph in graphml format}
 
-\item{option}{(values: 1 or 2). This option allows create either a graph
-where nodes are GO terms and edges are features and species are edges arributes or
-a graph where nodes are GO terms and edges are species belonging  (default value=2).}
+\item{option}{(values: "Categories or "GO"). This option allows create either a graph
+where nodes are GO terms and edges are features and GO as well as species belonging are edges attributes or
+a graph where nodes are GO terms and edges are species belonging  (default value="Categories").}
 
 \item{numCores}{numeric, Number of cores to use for the process (default value numCores=2)}
 
@@ -37,13 +37,35 @@ a graph where nodes are GO terms and edges are species belonging  (default value
 works when saveGraph=TRUE}
 }
 \value{
-This function will return a table representing an edge list
+This function will return a list with two slots: edges and nodes. Edges represent an edge list and their weights and
+ nodes which represent the nodes and their respective weights (weights, shared)
 }
 \description{
 graph_two_GOspecies is a function to create undirected graphs
  to compare GO terms between two species using two options:
-1.) Nodes are GO terms such as biological processes and the edges are features and species are edges attributes
-2.) Nodes are GO terms such as biological processes and species status (e.g. A.thaliana, H. sapiens or shared) are edgess
+ 1.) Nodes are GO terms such as biological processes and the edges represent features for a species since the method creates a graph per species
+ as well as shared GO terms between them.
+ Edge weights are calculated as the intersection where cat(U) n cat(V) represents
+ categories where the GO terms U and V are. nBP is the total number of biological processes
+ represented by the GO terms (1). Node weights are calculated as the sum of all w(e) where the node is a participant (2) in each species and a shared GO terms(k) graphs.
+
+ (Please be patient, it requires a long time to finish).
+ \deqn{w(e) = \frac{|cat(U) n cat(V)|}{|nBP|}}{%
+ w(e) = |cat(U) n cat(V)| / |nBP| (1)}
+
+ \deqn{K_w(U) =  \sum(\sum(w(U,V)k=,1,k))}{%
+ K_w(U) =  sum(sum(w(U,V),k=,1,k)) (2)}
+
+
+ 2.) Nodes are features and edges are GO terms available in the set of graphs (k) which consist of each species graphs and a shared GO terms graph (k).
+ Two edges weights are calculated. First, edges weights are calculated as number of BP in the feature in comparison with the total number of GO terms available (3).
+ Second, a shared weight is calculated for interactions shared between two species. Finally, node weights are calculated as the sum of all w(e) where the node is a participant (2) in each  species and a shared GO terms(k) graphs
+
+ \deqn{w(e) = \frac{|BP(U) n BP(V)|}{|nBP|}}{%
+ w(e) = |BP(U) n BP(V)| / |nBP| (3)}
+
+ \deqn{K_w(U) =  \sum(\sum(w(U,V)k=,1,k))}{%
+ K_w(U) =  sum(sum(w(U,V),k=,1,k)) (4)}
 }
 \examples{
 
@@ -58,7 +80,7 @@ x_graph <- graph_two_GOspecies(x=comparison_ex_compress,
           GOterm_field=GOterm_field,
           numCores=2,
           saveGraph = FALSE,
-          option= 1,
+          option= "Categories",
           outdir = NULL)
 head(x_graph)
 }

@@ -1,17 +1,40 @@
-#' @title Comprehensive visual and graph comparison between two species and
-#'  a series of categories
+#' @title Undirected network representation  for the results of functional
+#'  enrichment analysis to compare two species and a series of categories
 #' @name graph_two_GOspecies
 #' @description graph_two_GOspecies is a function to create undirected graphs
 #'  to compare GO terms between two species using two options:
-#' 1.) Nodes are GO terms such as biological processes and the edges are features and species are edges attributes
-#' 2.) Nodes are GO terms such as biological processes and species status (e.g. A.thaliana, H. sapiens or shared) are edgess
-#' @param x is a list of running the comparegOspecies species.
+#'  1.) Nodes are GO terms such as biological processes and the edges represent features for a species since the method creates a graph per species
+#'  as well as shared GO terms between them.
+#'  Edge weights are calculated as the intersection where cat(U) n cat(V) represents
+#'  categories where the GO terms U and V are. nBP is the total number of biological processes
+#'  represented by the GO terms (1). Node weights are calculated as the sum of all w(e) where the node is a participant (2) in each species and a shared GO terms(k) graphs.
+#'
+#'  (Please be patient, it requires a long time to finish).
+#'  \deqn{w(e) = \frac{|cat(U) n cat(V)|}{|nBP|}}{%
+#'  w(e) = |cat(U) n cat(V)| / |nBP| (1)}
+#'
+#'  \deqn{K_w(U) =  \sum(\sum(w(U,V)k=,1,k))}{%
+#'  K_w(U) =  sum(sum(w(U,V),k=,1,k)) (2)}
+#'
+#'
+#'  2.) Nodes are features and edges are GO terms available in the set of graphs (k) which consist of each species graphs and a shared GO terms graph (k).
+#'  Two edges weights are calculated. First, edges weights are calculated as number of BP in the feature in comparison with the total number of GO terms available (3).
+#'  Second, a shared weight is calculated for interactions shared between two species. Finally, node weights are calculated as the sum of all w(e) where the node is a participant (2) in each  species and a shared GO terms(k) graphs
+#'
+#'  \deqn{w(e) = \frac{|BP(U) n BP(V)|}{|nBP|}}{%
+#'  w(e) = |BP(U) n BP(V)| / |nBP| (3)}
+#'
+#'  \deqn{K_w(U) =  \sum(\sum(w(U,V)k=,1,k))}{%
+#'  K_w(U) =  sum(sum(w(U,V),k=,1,k)) (4)}
+#'
+#'
+#' @param x is a list obtained as output of the comparegOspecies function.
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional_Category")
-#' @param species1 This is a string with the species name for the species 1 (e.g; "H. sapiens")
-#' @param species2 This is a string with the species name for the species 2 (e.g; "A. thaliana")
-#' @param option  (values: 1 or 2). This option allows create either a graph
-#'  where nodes are GO terms and edges are features and species are edges arributes or
-#'  a graph where nodes are GO terms and edges are species belonging  (default value=2).
+#' @param species1 This is a string with the species name for species 1 (e.g; "H. sapiens")
+#' @param species2 This is a string with the species name for species 2 (e.g; "A. thaliana")
+#' @param option  (values: "Categories or "GO"). This option allows create either a graph
+#'  where nodes are GO terms and edges are features and GO as well as species belonging are edges attributes or
+#'  a graph where nodes are GO terms and edges are species belonging  (default value="Categories").
 #' @param numCores numeric, Number of cores to use for the process (default value numCores=2)
 #' @param saveGraph logical, if \code{TRUE} the function will allow save the graph in graphml format
 #' @param outdir This parameter will allow save the graph file in a folder described here (e.g: "D:").This parameter only
@@ -29,10 +52,11 @@
 #'           GOterm_field=GOterm_field,
 #'           numCores=2,
 #'           saveGraph = FALSE,
-#'           option= 1,
+#'           option= "Categories",
 #'           outdir = NULL)
 #' head(x_graph)
-#' @return This function will return a table representing an edge list
+#' @return This function will return a list with two slots: edges and nodes. Edges represent an edge list and their weights and
+#'  nodes which represent the nodes and their respective weights (weights, shared)
 #' @importFrom utils combn setTxtProgressBar txtProgressBar
 #' @importFrom parallel makeCluster parLapply stopCluster detectCores
 #' @importFrom igraph graph_from_data_frame write.graph
@@ -45,7 +69,7 @@ graph_two_GOspecies <-
            species2,
            GOterm_field,
            saveGraph = FALSE,
-           option = 2,
+           option = "Categories",
            numCores=2,
            outdir = NULL) {
 
@@ -54,9 +78,10 @@ graph_two_GOspecies <-
 
     join_db <- rbind(x$shared_GO_list, x$unique_GO_list)
     GO_list <- unique(join_db$GO)
+    CAT_list <- unique(join_db$feature)
     unique_sp <- unique(join_db$species)
 
-    if (is.null(option)) {
+    if (is.null(option) | !option %in% c("Categories","GO")) {
       stop("Please use a valid option")
     }
 
@@ -72,9 +97,12 @@ graph_two_GOspecies <-
       stop("Number of cores exceed the maximum allowed by the machine, use a coherent number of cores such as four")
     }
 
-    if (option == 1) {
+    message("Obtaining features and GO terms")
 
-      message("Using GO terms and species as edges")
+
+    if (option == "Categories") {
+
+      message("Using Categories as nodes and species as edges")
 
       cl <- parallel::makeCluster(numCores)
       parallel::clusterExport(cl, varlist=c("GO_list","join_db","species1","species2"),envir=environment())
@@ -178,7 +206,7 @@ graph_two_GOspecies <-
 
       graph_db1 <- as.data.frame(do.call(rbind, graph_db1))
       graph_db1 <-
-        graph_db1[which(graph_db1$SOURCE != "character(0)"),]
+      graph_db1[which(graph_db1$SOURCE != "character(0)"),]
       graph_db1 <- graph_db1[which(graph_db1$FEATURE %in% GO_list),]
 
       graph_db1$SOURCE <- as.character(graph_db1$SOURCE)
@@ -188,7 +216,7 @@ graph_two_GOspecies <-
       rm(cl)
 
 
-      message("Extracting edges weight")
+      message("Extracting edge weights")
 
       cl <- parallel::makeCluster(numCores)
       parallel::clusterExport(cl, varlist=c("GO_list","join_db","species1","species2","graph_db1","opt"),envir=environment())
@@ -219,7 +247,32 @@ graph_two_GOspecies <-
       res <- do.call(rbind,res)
       colnames(res)[c(3,5)] <- c("GO_N","GO")
 
-    } else {
+
+      #Extracting node weights
+      message("Extracting node weights")
+
+      cl <- parallel::makeCluster(numCores)
+      parallel::clusterExport(cl, varlist=c("CAT_list","res"),envir=environment())
+      x_att <- parallel::parLapply(cl,
+                                   X = seq_len(length(CAT_list)),
+                                   fun = function (i){
+                                     x <-res[res$SOURCE %in%  trimws(CAT_list[[i]]) | res$TARGET %in%  trimws(CAT_list[[i]]),]
+
+                                     x <- data.frame(GO = trimws(CAT_list[[i]]),
+                                                     GO_WEIGHT = sum(x$WEIGHT),
+                                                     SHARED_WEIGHT=sum(x$SHARED_WEIGHT)
+
+                                     )
+
+                                   })
+      parallel::stopCluster(cl)
+
+      x_att <- do.call(rbind,x_att)
+
+      res <- list(nodes=x_att,edges=res)
+
+
+    } else if(option=="GO"){
       message("Using GO terms as nodes and species as edges")
 
       cl <- parallel::makeCluster(numCores)
@@ -252,54 +305,61 @@ graph_two_GOspecies <-
 
       graph_db2 <- graph_db2[!sapply(graph_db2,is.null)]
       graph_db2 <- do.call(rbind, graph_db2)
-      #colnames(graph_db2) <- c("SOURCE", "TARGET", "SP")
       graph_db2 <- graph_db2[graph_db2$SP %in%unique_sp,]
 
       rm(cl)
+
+      #Extracting node weights
+      message("Extracting node weights")
+
+      cl <- parallel::makeCluster(numCores)
+      parallel::clusterExport(cl, varlist=c("GO_list","graph_db2"),envir=environment())
+      x_att <- parallel::parLapply(cl,
+                                   X = seq_len(length(GO_list)),
+                                   fun = function (i){
+                                     x <-graph_db2[graph_db2$SOURCE %in%  trimws(GO_list[[i]]) | graph_db2$TARGET %in%  trimws(GO_list[[i]]),]
+
+                                     x <- data.frame(GO = trimws(GO_list[[i]]),
+                                                     GO_WEIGHT = sum(x$WEIGHT)
+
+                                     )
+
+                                   })
+      parallel::stopCluster(cl)
+
+      x_att <- do.call(rbind,x_att)
+
+      #Saving in a list object
+      message("Saving results in a list object")
+      res <- list(nodes=x_att,edges=graph_db2)
+
+
+
     }
 
     if (isTRUE(saveGraph)) {
-      if (isTRUE(option == 1)) {
-        x1 <- igraph::graph_from_data_frame(res, directed = FALSE)
-        message(paste("saving ",paste0(outdir, "/", "comparison_option1.graphml")))
+      if (isTRUE(option == "Categories")) {
+        x1 <- igraph::graph_from_data_frame(res$edges, directed = FALSE,vertices = res$nodes)
+        message(paste("saving ",paste0(outdir, "/", "CAT_TWO_SP.graphml")))
 
         igraph::write.graph(
           x1,
-          file = paste0(outdir, "/", "comparison_option1.graphml"),
+          file = paste0(outdir, "/", "CAT_TWO_SP.graphml"),
           format = "graphml"
         )
-      } else {
+      } else if(isTRUE(option =="GO")){
 
-        cl <- parallel::makeCluster(numCores)
-        parallel::clusterExport(cl, varlist=c("GO_list","graph_db2"),envir=environment())
-        x_att <- parallel::parLapply(cl,
-                                     X = seq_len(length(GO_list)),
-                                     fun = function (i){
-                                       x <-graph_db2[graph_db2$SOURCE %in%  trimws(GO_list[[i]]) | graph_db2$TARGET %in%  trimws(GO_list[[i]]),]
 
-                                       x <- data.frame(GO = trimws(GO_list[[i]]),
-                                                       GO_WEIGHT = sum(x$WEIGHT)
-
-                                       )
-
-                                     })
-        parallel::stopCluster(cl)
-
-        x_att <- do.call(rbind,x_att)
-        x2 <- igraph::graph_from_data_frame(graph_db2, directed = FALSE,vertices = x_att)
-        message(paste("saving ",paste0(outdir, "/", "comparison_option2.graphml")))
+        x2 <- igraph::graph_from_data_frame(res$edges, directed = FALSE,vertices = res$nodes)
+        message(paste("saving ",paste0(outdir, "/", "GO_TWO_SP.graphml")))
         igraph::write.graph(
           x2,
-          file = paste0(outdir, "/", "comparison_option2.graphml"),
+          file = paste0(outdir, "/", "GO_TWO_SP.graphml"),
           format = "graphml"
         )
       }
     }
 
-    if(option==1){
-      return(res)
-    } else {
-      return(graph_db2)
-    }
+    return(res)
   }
 

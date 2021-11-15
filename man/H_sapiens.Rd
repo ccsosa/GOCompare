@@ -5,7 +5,7 @@
 \alias{H_sapiens}
 \title{H. sapiens functional enrichment analysis of 5494 genes related to cancer-hallmarks}
 \format{
-A data frame with 2000 rows and 6 variables:
+A data frame with 5000 rows and 6 variables:
 \describe{
   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
   \item{Genes_in_list}{numeric: Number of genes in the list of genes for a given GO term}

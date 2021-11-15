@@ -1,24 +1,27 @@
-#' @title Comprehensive visual and graph comparison between two species and
-#'  a series of categories
+#' @title Visual representation for the results of functional
+#'  enrichment analysis to compare two species and a series of categories
+#'
 #' @name compareGOspecies
-#' @description compareGOspecies provides a simple workflow to compare results
-#'  of functional enrichment analysis
-#'  for two species and a column which represent features to be compared.
-#'  This function will extract the unique GO terms for two matrices matrices
-#'  provided and will generate a presence-absence matrix where rows will represent
-#'  a combination of categories and species(e.g H.sapies AID) and columns will be
-#'  the GO terms analyzed.Further, this code will calculate Jaccard distances and
-#'  will provide as outputs a principal
-#'  coordinates analysis (PCoA), the jaccard distance matrix, the list of shared
-#'  GO terms between species and finally, a list of the unique GO terms and the belongig to the species.
+#' @description compareGOspecies function provides a simple workflow to compare results
+#'  of functional enrichment analysis for two species.
+#'
+#'  To use this function you will need two matrices with a column which, represents the features to be compared (e.g.feature).
+#'  This function will extract the unique GO terms for two matrices and it will generate a presence-absence matrix
+#'  where rows will represent a combination of categories and species (e.g H.sapiens AID) and columns will represent
+#'  the GO terms analyzed. Further, this function  will calculate Jaccard distances and it will provide as outputs a list with four slots:
+#'   1.) A principal coordinates analysis (PCoA)
+#'   2.) The Jaccard distance matrix
+#'   3.) A list of shared GO terms between species
+#'   4.) Finally, a list of the unique GO terms and the belonging to the respective species.
+#'
 #' @param df1 A data frame with the results of a functional enrichment analysis for the species 1
 #'  with an extra column "feature" with the features to be compared
 #' @param df2 A data frame with the results of a functional enrichment analysis for the species 2
 #'  with an extra column "feature" with the features to be compared
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional_Category")
-#' @param species1 This is a string with the species name for the species 1 (e.g; "H. sapiens")
-#' @param species2 This is a string with the species name for the species 2 (e.g; "A. thaliana")
-#' @return This function will return a list with four slots: graphics, distance shared_GO_list,and unique_GO_list
+#' @param species1 This is a string with the species name for species 1 (e.g; "H. sapiens")
+#' @param species2 This is a string with the species name for species 2 (e.g; "A. thaliana")
+#' @return This function will return a list with four slots: graphics, distance shared_GO_list, and unique_GO_list
 #' @examples
 #'
 #' #Loading example datasets
@@ -51,6 +54,17 @@
 
 compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
 
+  if (is.null(df1) | is.null(df2)) {
+    stop("One input dataframe is absent, please add it and try again")
+  }
+  if (is.null(species1) | is.null(species2)) {
+    stop("Missing Species name , please add it and try again")
+  }
+
+  if (species1==species2) {
+    stop("Same species name to compare, please fix")
+  }
+
   txtProgressBar <- NULL
   chull <- NULL
   Axis.1 <- NULL
@@ -63,7 +77,6 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
   comb2 <- paste(species2,"-",unique(df2[,"feature"]))
   comb2_feat <- unique(df2[,"feature"])
   comb_all_feat <- c(comb1,comb2)
-  #comb_feat_3 <- unique(comb1_feat,comb2_feat)
 
   GO_terms_unique <- unique(c(df1[,GOterm_field],df2[,GOterm_field]))
   mat_for_dist <- as.data.frame(matrix(nrow=length(comb1)+length(comb2),ncol = length(GO_terms_unique)))
@@ -82,7 +95,7 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
 
 
 
-  message("Extracting data to calculate jaccard distances")
+  message("Extracting data to calculate Jaccard distances")
   pb <- utils::txtProgressBar(min = 0, max = nrow(mat_for_dist), style = 3)
 
   for(i in seq_len(nrow(mat_for_dist))){
@@ -102,6 +115,7 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
   };rm(i)
   close(pb)
 
+  message("Calculating Jaccard distances")
   jacc_dist <- vegan::vegdist(mat_for_dist,method = "jaccard",na.rm = TRUE)
 
   vare.mds <- ape::pcoa(jacc_dist)
@@ -117,6 +131,8 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
 
   species.scores <- as.data.frame(vare.mds2)  #Using the scores function from vegan to extract the species scores and convert to a data.frame
   species.scores$grp <- unlist(lapply(strsplit(row.names(species.scores),"-"), `[[`, 2))
+
+  message("Calculating PCoA")
 
   ov_plot <-
     ggplot2::ggplot() +

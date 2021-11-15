@@ -70,7 +70,7 @@
 #' @name H_sapiens
 #' @docType data
 #' @description This dataset is a subset of the original dataset obtained for Clavijo-Buriticá (In preparation)
-#' @format A data frame with 2000 rows and 6 variables:
+#' @format A data frame with 5000 rows and 6 variables:
 #' \describe{
 #'   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
 #'   \item{Genes_in_list}{numeric: Number of genes in the list of genes for a given GO term}
