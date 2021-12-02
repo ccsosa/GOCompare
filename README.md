@@ -104,6 +104,10 @@ x <- GOCompare::graphGOspecies(df=x_s$result,
 # visualize nodes 
 View(x$nodes)
 
+#Get nodes with values greater than 95%
+perc <- x$nodes[which(x$nodes$GO_WEIGHT > quantile(x$nodes$GO_WEIGHT,probs = 0.95)),]
+# visualize nodes filtered
+View(perc)
 ```
 
 ## Authors
