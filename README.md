@@ -84,7 +84,7 @@ names(x_Hsap) <- CH
                            measure_underrepresentation = FALSE, evcodes = FALSE,
                            user_threshold = 0.05, correction_method = "g_SCS",
                            domain_scope = "annotated", custom_bg = NULL,
-                           numeric_ns = "", sources = NULL, as_short_link = FALSE)
+                           numeric_ns = "", sources = "GO:BP", as_short_link = FALSE)
 
 colnames(x_s$result)[1] <- "feature"
 
