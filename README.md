@@ -92,7 +92,7 @@ colnames(x_s$result)[1] <- "feature"
 
 x <- GOCompare::graphGOspecies(df=x_s$result,
                     GOterm_field="term_name",
-                    option = 2,
+                    option = "GO",
                     numCores=6,
                     saveGraph=FALSE,
                     outdir = NULL)
