@@ -88,6 +88,9 @@ names(x_Hsap) <- CH
 
 colnames(x_s$result)[1] <- "feature"
 
+#Check number of enriched terms per category
+tapply(x_s$result$feature,x_s$result$feature,length)
+
 #Running function to get graph of a list of features and GO terms
 
 x <- GOCompare::graphGOspecies(df=x_s$result,
@@ -97,7 +100,9 @@ x <- GOCompare::graphGOspecies(df=x_s$result,
                     saveGraph=FALSE,
                     outdir = NULL)
 
-x
+
+# visualize nodes 
+View(x$nodes)
 
 ```
 
