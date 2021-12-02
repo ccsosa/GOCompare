@@ -6,7 +6,7 @@
 \title{H. sapiens functional enrichment analysis results for
  "AID","DCE","RCD","SPS" cancer-hallmarks}
 \format{
-A data frame with 2000 rows and 6 variables:
+A data frame with 120 rows and 6 variables (30 GO terms per cancer hallmark):
 \describe{
   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
   \item{Genes_in_list}{numeric: Number of genes in the list of genes for a given GO term}

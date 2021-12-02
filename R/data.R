@@ -4,7 +4,7 @@
 #' @docType data
 #' @description This dataset is a subset of the original dataset obtained
 #'  for Clavijo-Buriticá (In preparation)
-#' @format A data frame with 2000 rows and 6 variables:
+#' @format A data frame with 120 rows and 6 variables  (30 GO terms per cancer hallmark):
 #' \describe{
 #'   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
 #'   \item{Genes_in_list}{numeric: Number of genes in the list of genes for a given GO term}
@@ -27,7 +27,7 @@
 #' @docType data
 #' @description This dataset is a subset of the original dataset obtained
 #' for Clavijo-Buriticá (In preparation)
-#' @format A data frame with 2000 rows and 6 variables:
+#' @format A data frame with 120 rows and 6 variables (30 GO terms per cancer hallmark):
 #' \describe{
 #'   \item{Enrichment_FDR}{Numeric: False discovery rate values for the GO term}
 #'   \item{Genes_in_list}{numeric: Number of genes in the list of genes for a given GO term}
@@ -106,3 +106,23 @@
 #' specific carcinogenic events (to be submitted, Target journal: Plos Biology)
 #' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
 "comparison_ex_compress"
+
+#' @title Functional enrichment analysis comparison between H. sapiens and A. thaliana
+#' for "DCE", and "RCD" cancer-hallmarks. This dataset contains 10 GO terms per category
+#'  to allow a fast run of the function graph_two_GOspecies.
+#' @name comparison_ex_compress_CH
+#' @docType data
+#' @description This dataset is the results of running the compareGOspecies species and
+#'  it is composed of three slots:
+#' \describe{
+#'   \item{distance}{numeric: Jaccard distance matrix }
+#'   \item{shared_GO_list}{data.frame with shared GO terms between species}
+#'   \item{unique_GO_list}{data.frame with unique GO terms and their belonging two each species}
+#' }
+#' @references
+#' Clavijo-Buriticá, Sosa, C.C., Mosquera, A.J. Álvarez, A., Medina, J. Quimbaya,
+#' M.A. A systematic comparison of the molecular machinery associated with Cancer-Hallmarks
+#' between plants and humans reveals Arabidopsis thaliana as a useful model to understand
+#' specific carcinogenic events (to be submitted, Target journal: Plos Biology)
+#' @source \url{https://data.mendeley.com/datasets/myyy2wxd59/1}
+"comparison_ex_compress_CH"

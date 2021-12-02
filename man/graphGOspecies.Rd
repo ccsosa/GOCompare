@@ -20,10 +20,10 @@ a species with an extra column "feature" with the features to be compared}
 
 \item{GOterm_field}{This is a string with the column name of the GO terms (e.g: "Functional.Category")}
 
-\item{option}{(values: "GO" or "categories"). This option allows create either a graph where nodes are GO terms and edges are features or alternatively
-a graph where nodes are features and edges are GO terms (default value="categories").}
+\item{option}{(values: "GO" or "Categories"). This option allows create either a graph where nodes are GO terms and edges are features or alternatively
+a graph where nodes are features and edges are GO terms (default value="Categories")}
 
-\item{numCores}{numeric, Number of cores to use for the process (default value numCores=2)}
+\item{numCores}{numeric, Number of cores to use for the process (default value numCores=2). For the example below, only one core will be used}
 
 \item{saveGraph}{logical, if \code{TRUE} the function will allow save the graph in graphml format}
 
@@ -31,8 +31,8 @@ a graph where nodes are features and edges are GO terms (default value="categori
 works when saveGraph=TRUE}
 }
 \value{
-This function will return a list with two slots: edges and nodes. Edges represent an edge list and their weights and
- nodes which represent the nodes and their respective weights
+This function will return a list with two slots: edges and nodes. Edges represents an edge list and their weights and
+ nodes which represents the nodes and their respective weights
 }
 \description{
 graphGOspecies is a function to create undirected graphs using two options:
@@ -64,15 +64,15 @@ nBP is the total number of biological processes (3). FInally, the node weights i
 
 #Loading example datasets
 data(H_sapiens_compress)
-#Defining the column with the GO terms to be compared
+
 GOterm_field <- "Functional_Category"
+
 #Running function
 x <- graphGOspecies(df=H_sapiens_compress,
                      GOterm_field=GOterm_field,
-                     option = "GO",
-                     numCores=2,
+                     option = "Categories",
+                     numCores=1,
                      saveGraph=FALSE,
                      outdir = NULL)
-#Displaying results
-head(x)
+
 }

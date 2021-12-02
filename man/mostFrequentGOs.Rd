@@ -17,7 +17,7 @@ This function will return a table with the frequency of GO terms per feature
 }
 \description{
 Provides an easy way to get the frequency of GO terms
- such as biological processes for a data frame and a series of features.
+ such as biological processes for a data frame and a series of features
 }
 \examples{
 

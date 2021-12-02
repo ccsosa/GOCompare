@@ -17,7 +17,7 @@ graph_two_GOspecies(
 )
 }
 \arguments{
-\item{x}{is a list obtained as output of the comparegOspecies function.}
+\item{x}{is a list obtained as output of the comparegOspecies function}
 
 \item{species1}{This is a string with the species name for species 1 (e.g; "H. sapiens")}
 
@@ -29,9 +29,9 @@ graph_two_GOspecies(
 
 \item{option}{(values: "Categories or "GO"). This option allows create either a graph
 where nodes are GO terms and edges are features and GO as well as species belonging are edges attributes or
-a graph where nodes are GO terms and edges are species belonging  (default value="Categories").}
+a graph where nodes are GO terms and edges are species belonging  (default value="Categories")}
 
-\item{numCores}{numeric, Number of cores to use for the process (default value numCores=2)}
+\item{numCores}{numeric, Number of cores to use for the process (default value numCores=2). For the example below, only one core will be used}
 
 \item{outdir}{This parameter will allow save the graph file in a folder described here (e.g: "D:").This parameter only
 works when saveGraph=TRUE}
@@ -43,11 +43,14 @@ This function will return a list with two slots: edges and nodes. Edges represen
 \description{
 graph_two_GOspecies is a function to create undirected graphs
  to compare GO terms between two species using two options:
- 1.) Nodes are GO terms such as biological processes and the edges represent features for a species since the method creates a graph per species
+ 1.) Nodes are GO terms such as biological processes and the edges represent
+ features for a species since the method creates a graph per species
  as well as shared GO terms between them.
- Edge weights are calculated as the intersection where cat(U) n cat(V) represents
- categories where the GO terms U and V are. nBP is the total number of biological processes
- represented by the GO terms (1). Node weights are calculated as the sum of all w(e) where the node is a participant (2) in each species and a shared GO terms(k) graphs.
+ Edge weights are calculated as the intersection where cat(U) n cat(V)
+ represents categories where the GO terms U and V are. nBP is the total number
+ of biological processes represented by the GO terms (1). Node weights are
+  calculated as the sum of all w(e) where the node is a participant (2)
+   in each species and a shared GO terms(k) graphs.
 
  (Please be patient, it requires a long time to finish).
  \deqn{w(e) = \frac{|cat(U) n cat(V)|}{|nBP|}}{%
@@ -70,17 +73,17 @@ graph_two_GOspecies is a function to create undirected graphs
 \examples{
 
 GOterm_field <- "Functional_Category"
-data(comparison_ex_compress)
+data(comparison_ex_compress_CH)
 #Defining the species names
 species1 <- "H. sapiens"
 species2 <- "A. thaliana"
-x_graph <- graph_two_GOspecies(x=comparison_ex_compress,
+x_graph <- graph_two_GOspecies(x=comparison_ex_compress_CH,
           species1=species1,
           species2=species2,
           GOterm_field=GOterm_field,
-          numCores=2,
+          numCores=1,
           saveGraph = FALSE,
           option= "Categories",
           outdir = NULL)
-head(x_graph)
+
 }

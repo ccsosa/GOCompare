@@ -30,33 +30,33 @@
 #' @param df A data frame with the results of a functional enrichment analysis for
 #'  a species with an extra column "feature" with the features to be compared
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g: "Functional.Category")
-#' @param option  (values: "GO" or "categories"). This option allows create either a graph where nodes are GO terms and edges are features or alternatively
-#'  a graph where nodes are features and edges are GO terms (default value="categories").
-#' @param numCores numeric, Number of cores to use for the process (default value numCores=2)
+#' @param option  (values: "GO" or "Categories"). This option allows create either a graph where nodes are GO terms and edges are features or alternatively
+#'  a graph where nodes are features and edges are GO terms (default value="Categories")
+#' @param numCores numeric, Number of cores to use for the process (default value numCores=2). For the example below, only one core will be used
 #' @param saveGraph logical, if \code{TRUE} the function will allow save the graph in graphml format
 #' @param outdir This parameter will allow save the graph file in a folder described here (e.g: "D:").This parameter only
 #' works when saveGraph=TRUE
 #'
-#' @return This function will return a list with two slots: edges and nodes. Edges represent an edge list and their weights and
-#'  nodes which represent the nodes and their respective weights
+#' @return This function will return a list with two slots: edges and nodes. Edges represents an edge list and their weights and
+#'  nodes which represents the nodes and their respective weights
 #' @examples
 #'
 #' #Loading example datasets
 #' data(H_sapiens_compress)
-#' #Defining the column with the GO terms to be compared
+#'
 #' GOterm_field <- "Functional_Category"
+#'
 #' #Running function
 #' x <- graphGOspecies(df=H_sapiens_compress,
 #'                      GOterm_field=GOterm_field,
-#'                      option = "GO",
-#'                      numCores=2,
+#'                      option = "Categories",
+#'                      numCores=1,
 #'                      saveGraph=FALSE,
 #'                      outdir = NULL)
-#' #Displaying results
-#' head(x)
+#'
 #' @importFrom utils combn
 #' @importFrom igraph graph_from_data_frame write.graph
-#' @importFrom parallel makeCluster parLapply stopCluster detectCores
+#' @importFrom parallel makeCluster parLapplyLB stopCluster detectCores
 #' @importFrom stats aggregate
 #' @importFrom stringr str_count
 #' @export
@@ -97,7 +97,7 @@ graphGOspecies <- function(df, GOterm_field, option = "Categories", numCores=2,s
     cl <- parallel::makeCluster(numCores)
     parallel::clusterExport(cl, varlist=c("features_list","df","GOterm_field"),envir=environment())
 
-    option1 <- parallel::parLapply (cl,
+    option1 <- parallel::parLapplyLB(cl,
                                     X = seq_len(length(features_list)),
                                     fun = function (i){
                                       x <- df[, GOterm_field][which(df$feature == features_list[[i]])]
@@ -133,7 +133,7 @@ graphGOspecies <- function(df, GOterm_field, option = "Categories", numCores=2,s
 
     cl <- parallel::makeCluster(numCores)
     parallel::clusterExport(cl, varlist=c("GO_list","res"),envir=environment())
-    x_att <- parallel::parLapply(cl,
+    x_att <- parallel::parLapplyLB(cl,
                                  X = seq_len(length(GO_list)),
                                  fun = function (i){
                                    x <-res[res$SOURCE %in%  trimws(GO_list[[i]]) | res$TARGET %in%  trimws(GO_list[[i]]),]
@@ -166,7 +166,7 @@ graphGOspecies <- function(df, GOterm_field, option = "Categories", numCores=2,s
 
     parallel::clusterExport(cl, varlist=c("GOterm_field","GO_list","df"),envir=environment())
 
-    option2 <- parallel::parLapply (cl,
+    option2 <- parallel::parLapplyLB(cl,
                                     X = seq_len(length(GO_list)),
                                     fun = function (i){
                                       x <- df$feature[which(df[, GOterm_field] == GO_list[[i]])]
@@ -192,7 +192,7 @@ graphGOspecies <- function(df, GOterm_field, option = "Categories", numCores=2,s
     cl <- parallel::makeCluster(numCores)
     parallel::clusterExport(cl, varlist=c("option2","GO_list","opt"),envir=environment())
 
-    res <- parallel::parLapply(cl,
+    res <- parallel::parLapplyLB(cl,
                                X = seq_len(nrow(opt)),
                                fun = function (i){
                                  x_feat <- paste(option2$GO[option2$SOURCE %in% opt[i,1] &

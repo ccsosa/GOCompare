@@ -32,18 +32,21 @@
 #' #Defining the species names
 #' species1 <- "H. sapiens"
 #' species2 <- "A. thaliana"
+#'
 #' #Running function
 #' x <- compareGOspecies(df1=H_sapiens_compress,
 #'                       df2=A_thaliana_compress,
 #'                       GOterm_field=GOterm_field,
 #'                       species1=species1,
 #'                       species2=species2)
+#'
+#' \dontrun{
 #' #Displaying PCoA results
-#' x$graphics
+#'  x$graphics
 #' # Checking shared GO terms between species
-#' print(tapply(x$shared_GO_list$feature,x$shared_GO_list$feature,length))
-#' # Checking unique GO terms for each species
-#' print(tapply(x$unique_GO_list$species,x$unique_GO_list$species,length))
+#'  print(tapply(x$shared_GO_list$feature,x$shared_GO_list$feature,length))
+#'  }
+#'
 #' @importFrom vegan vegdist
 #' @importFrom ape pcoa
 #' @importFrom ggplot2 ggplot geom_polygon geom_point aes

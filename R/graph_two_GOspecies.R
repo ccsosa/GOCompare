@@ -3,11 +3,14 @@
 #' @name graph_two_GOspecies
 #' @description graph_two_GOspecies is a function to create undirected graphs
 #'  to compare GO terms between two species using two options:
-#'  1.) Nodes are GO terms such as biological processes and the edges represent features for a species since the method creates a graph per species
+#'  1.) Nodes are GO terms such as biological processes and the edges represent
+#'  features for a species since the method creates a graph per species
 #'  as well as shared GO terms between them.
-#'  Edge weights are calculated as the intersection where cat(U) n cat(V) represents
-#'  categories where the GO terms U and V are. nBP is the total number of biological processes
-#'  represented by the GO terms (1). Node weights are calculated as the sum of all w(e) where the node is a participant (2) in each species and a shared GO terms(k) graphs.
+#'  Edge weights are calculated as the intersection where cat(U) n cat(V)
+#'  represents categories where the GO terms U and V are. nBP is the total number
+#'  of biological processes represented by the GO terms (1). Node weights are
+#'   calculated as the sum of all w(e) where the node is a participant (2)
+#'    in each species and a shared GO terms(k) graphs.
 #'
 #'  (Please be patient, it requires a long time to finish).
 #'  \deqn{w(e) = \frac{|cat(U) n cat(V)|}{|nBP|}}{%
@@ -28,37 +31,37 @@
 #'  K_w(U) =  sum(sum(w(U,V),k=,1,k)) (4)}
 #'
 #'
-#' @param x is a list obtained as output of the comparegOspecies function.
+#' @param x is a list obtained as output of the comparegOspecies function
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional_Category")
 #' @param species1 This is a string with the species name for species 1 (e.g; "H. sapiens")
 #' @param species2 This is a string with the species name for species 2 (e.g; "A. thaliana")
 #' @param option  (values: "Categories or "GO"). This option allows create either a graph
 #'  where nodes are GO terms and edges are features and GO as well as species belonging are edges attributes or
-#'  a graph where nodes are GO terms and edges are species belonging  (default value="Categories").
-#' @param numCores numeric, Number of cores to use for the process (default value numCores=2)
+#'  a graph where nodes are GO terms and edges are species belonging  (default value="Categories")
+#' @param numCores numeric, Number of cores to use for the process (default value numCores=2). For the example below, only one core will be used
 #' @param saveGraph logical, if \code{TRUE} the function will allow save the graph in graphml format
 #' @param outdir This parameter will allow save the graph file in a folder described here (e.g: "D:").This parameter only
 #'  works when saveGraph=TRUE
 #' @examples
 #'
 #' GOterm_field <- "Functional_Category"
-#' data(comparison_ex_compress)
+#' data(comparison_ex_compress_CH)
 #' #Defining the species names
 #' species1 <- "H. sapiens"
 #' species2 <- "A. thaliana"
-#' x_graph <- graph_two_GOspecies(x=comparison_ex_compress,
+#' x_graph <- graph_two_GOspecies(x=comparison_ex_compress_CH,
 #'           species1=species1,
 #'           species2=species2,
 #'           GOterm_field=GOterm_field,
-#'           numCores=2,
+#'           numCores=1,
 #'           saveGraph = FALSE,
 #'           option= "Categories",
 #'           outdir = NULL)
-#' head(x_graph)
+#'
 #' @return This function will return a list with two slots: edges and nodes. Edges represent an edge list and their weights and
 #'  nodes which represent the nodes and their respective weights (weights, shared)
 #' @importFrom utils combn setTxtProgressBar txtProgressBar
-#' @importFrom parallel makeCluster parLapply stopCluster detectCores
+#' @importFrom parallel makeCluster parLapplyLB stopCluster detectCores
 #' @importFrom igraph graph_from_data_frame write.graph
 #'
 #' @export
@@ -110,7 +113,7 @@ graph_two_GOspecies <-
 
 
 
-      graph_db1 <- parallel::parLapply (cl,
+      graph_db1 <- parallel::parLapplyLB(cl,
                                         X = seq_len(length(GO_list)),
                                         fun = function (i){
                                           x_shared <-
@@ -221,7 +224,7 @@ graph_two_GOspecies <-
       cl <- parallel::makeCluster(numCores)
       parallel::clusterExport(cl, varlist=c("GO_list","join_db","species1","species2","graph_db1","opt"),envir=environment())
 
-      res <- parallel::parLapply (cl,
+      res <- parallel::parLapplyLB(cl,
                                   X = seq_len(nrow(opt)),
                                   fun = function (i){
 
@@ -253,7 +256,7 @@ graph_two_GOspecies <-
 
       cl <- parallel::makeCluster(numCores)
       parallel::clusterExport(cl, varlist=c("CAT_list","res"),envir=environment())
-      x_att <- parallel::parLapply(cl,
+      x_att <- parallel::parLapplyLB(cl,
                                    X = seq_len(length(CAT_list)),
                                    fun = function (i){
                                      x <-res[res$SOURCE %in%  trimws(CAT_list[[i]]) | res$TARGET %in%  trimws(CAT_list[[i]]),]
@@ -278,7 +281,7 @@ graph_two_GOspecies <-
       cl <- parallel::makeCluster(numCores)
       parallel::clusterExport(cl, varlist=c("unique_sp","join_db","species1","species2"),envir=environment())
 
-      graph_db2 <- parallel::parLapply (cl,
+      graph_db2 <- parallel::parLapplyLB(cl,
                                         X = seq_len(length(unique_sp)),
                                         fun = function (i){
                                           x <- join_db[which(join_db$species == unique_sp[[i]]),]
@@ -314,7 +317,7 @@ graph_two_GOspecies <-
 
       cl <- parallel::makeCluster(numCores)
       parallel::clusterExport(cl, varlist=c("GO_list","graph_db2"),envir=environment())
-      x_att <- parallel::parLapply(cl,
+      x_att <- parallel::parLapplyLB(cl,
                                    X = seq_len(length(GO_list)),
                                    fun = function (i){
                                      x <-graph_db2[graph_db2$SOURCE %in%  trimws(GO_list[[i]]) | graph_db2$TARGET %in%  trimws(GO_list[[i]]),]
