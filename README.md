@@ -1,4 +1,4 @@
-# GOCompare R package (In development)
+# GOCompare R package v1.0.0
 
 ## Description
 
@@ -6,7 +6,7 @@
 GOCompare can be installed as follows
 ```r
 #CRAN
-#install.packages("GOCompare") #TO BE SUBMITTED TO CRAN
+install.packages("GOCompare")
 #Alternative: GitHub
 library(devtools)
 remotes::install_github("ccsosa/GOCompare")
