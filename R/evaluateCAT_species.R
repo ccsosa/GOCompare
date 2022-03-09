@@ -1,6 +1,6 @@
-#' @title Comprehensive comparison between species using GO terms and Pearson's
+#' @title Comprehensive comparison between species using categories and Pearson's
 #'  Chi-squared Tests
-#' @name evaluateGO_species
+#' @name evaluateCAT_species
 #' @description evaluateGO_species provides a simple function  to compare results
 #'  of functional enrichment analysis for two species through the use of proportion tests or Pearson's
 #'  Chi-squared Tests and a False discovery rate correction
@@ -16,10 +16,9 @@
 #' @param species2 This is a string with the species name for the species 2 (e.g; "A. thaliana")
 #' @param test This is a string with the hypothesis test to be performed. Two options are provided,
 #' "prop" and "chi-squared" (default value="prop")
-#'
 #' @return This function will return a data.frame with the following fields:
 #' \tabular{lcc}{
-#' GO \tab GO term analyzed \cr
+#' CAT \tab Category  \cr
 #' pvalue \tab p-value obtained through the use of Pearson's Chi-squared Test\cr
 #' FDR \tab Multiple comparison correction for the p-value column \cr
 #' }
@@ -34,18 +33,18 @@
 #' species1 <- "H. sapiens"
 #' species2 <- "A. thaliana"
 #' #Running function
-#' x <- evaluateGO_species(df1= H_sapiens,
-#'                         df2=A_thaliana,
-#'                         species1=species1,
-#'                         species2=species2,
-#'                         GOterm_field=GOterm_field,
-#'                         test="prop")
+#' x <- evaluateCAT_species(df1= H_sapiens,
+#'                        df2=A_thaliana,
+#'                        species1=species1,
+#'                        species2=species2,
+#'                        GOterm_field=GOterm_field,
+#'                          test="prop")
 #' print(x)
-#' @importFrom stats chisq.test p.adjust prop.test
+#' @importFrom stats chisq.test p.adjust
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 
-evaluateGO_species <-
+evaluateCAT_species <-
   function(df1, df2, species1, species2, GOterm_field,test="prop") {
 
 
@@ -62,26 +61,29 @@ evaluateGO_species <-
     unique_sp <- c(species1, species2)
     unique_features <- unique(join_db$feature)
 
-    if (length(unique_features) < 15) {
-      warning("Number of features between two species is less than 15, be careful")
+    if (length(GO_list) < 15) {
+      warning("Number of GO terms between two species is less than 15, be careful")
     }
+
+
+
 
 
     if(test=="prop"){
 
-      message(paste("Applying proportion tests to ", length(GO_list), " GO terms"))
+      message(paste("Applying proportion tests to ", length(unique_features), " groups"))
 
       agg1 <- join_db[which(join_db$species==species1),]
       agg2 <- join_db[which(join_db$species==species2),]
 
 
-      prop_db1 <- lapply(seq_len(length(GO_list)), function(i){
+      prop_db1 <- lapply(seq_len(length(unique_features)), function(i){
 
-        x_GO <- data.frame(GO=GO_list[[i]],
-                           species1 = length(agg1$feature[which(agg1[,GOterm_field]==GO_list[i])]),
-                           species2 = length(agg2$feature[which(agg2[,GOterm_field]==GO_list[i])])
+        x_CAT <- data.frame(CAT=unique_features[[i]],
+                            species1 = length(agg1[,GOterm_field][which(agg1[,"feature"]==unique_features[i])]),
+                            species2 = length(agg2[,GOterm_field][which(agg2[,"feature"]==unique_features[i])])
         )
-        return(x_GO)
+        return(x_CAT)
       })
 
       prop_db1 <- do.call(rbind,prop_db1)
@@ -92,7 +94,7 @@ evaluateGO_species <-
 
       pb <-
         utils::txtProgressBar(min = 0,
-                              max = length(GO_list),
+                              max = length(unique_features),
                               style = 3)
 
       for(i in seq_len(nrow(prop_db1))){
@@ -107,7 +109,8 @@ evaluateGO_species <-
       close(pb)
 
       message("Applying FDR correction")
-      x_df_p_int <- data.frame(GO = prop_db1[,1],
+
+      x_df_p_int <- data.frame(CAT = prop_db1[,1],
                                pvalue = p_values_int,
                                FDR = stats::p.adjust(p_values_int,method = "fdr"))
 
@@ -117,23 +120,23 @@ evaluateGO_species <-
 
     } else if(test=="chi-squared"){
 
-      message(paste("Applying chi squared tests to ", length(GO_list), " GO terms"))
-
+      message(paste("Applying chi squared tests to ", length(unique_features), " groups"))
       pb <-
         utils::txtProgressBar(min = 0,
-                              max = length(GO_list),
+                              max = length(unique_features),
                               style = 3)
 
-      chisq_db1 <- lapply(seq_len(length(GO_list)), function(i) {
+      chisq_db1 <- lapply(seq_len(length(unique_features)), function(i) {
         utils::setTxtProgressBar(pb, i)
 
         x <-
-          join_db$species[which(join_db[, GOterm_field] == GO_list[[i]])]
+          join_db[which(join_db[, "feature"] == unique_features[[i]]),]
         xx <- matrix(nrow = 2, ncol = 2)
-        xx[1, 1] <- length(x[which(x == species1)])
-        xx[2, 1] <- length(x[which(x == species2)])
-        xx[1, 2] <- length(unique_features) - xx[1, 1]
-        xx[2, 2] <- length(unique_features) - xx[2, 1]
+
+        xx[1, 1] <- nrow(x[which(x$species == species1),])
+        xx[2, 1] <- nrow(x[which(x$species == species2),])
+        xx[1, 2] <- length(GO_list) - xx[1, 1]
+        xx[2, 2] <- length(GO_list) - xx[2, 1]
 
 
         x <- suppressWarnings(stats::chisq.test(
@@ -142,7 +145,7 @@ evaluateGO_species <-
           simulate.p.value = TRUE,
           B = 1000
         ))
-        df <- data.frame(GO = GO_list[[i]], pvalue = x$p.value)
+        df <- data.frame(CAT = unique_features[[i]], pvalue = x$p.value)
         return(df)
       })
 
@@ -161,3 +164,4 @@ evaluateGO_species <-
       return(chisq_db1)
     }
   }
+

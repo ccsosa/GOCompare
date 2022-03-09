@@ -191,8 +191,16 @@ compareGOspecies <- function(df1,df2,GOterm_field,species1,species2){
 
   shared_GO_list <- do.call(rbind,shared_GO_list)
   unique_GO_list <- do.call(rbind,unique_GO_list)
+
+  if(nrow(shared_GO_list)==0){
+
+  shared_GO_list <- data.frame(feature=NA,
+                                GO=NA,
+                                species= "Shared")
+  } else {
   shared_GO_list$species <- "Shared"
 
+  }
   row.names(shared_GO_list) <- NULL
   row.names(unique_GO_list) <- NULL
 

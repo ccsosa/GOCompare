@@ -1,6 +1,6 @@
 Package: GOCompare
 Title: Comprehensive GO Terms Comparison Between Species
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(person("Chrystian Camilo", "Sosa",role = c("aut","cre","cph"), 
               comment = c(ORCID = "0000-0002-3734-3248"),
               email= "ccsosaa@javerianacali.edu.co"),
@@ -18,7 +18,7 @@ Authors@R: c(person("Chrystian Camilo", "Sosa",role = c("aut","cre","cph"),
               email = "arlen22@javerianacali.edu.co"),
              person("Andrés", "Álvarez",role = "ctb",
               email = "andresalvarez01@javerianacali.edu.co"))
-Description: Supports the assessment of functional enrichment analyses obtained for several lists of genes and provides a workflow to analyze them between two species via weighted graphs. Methods are described in Sosa et al. (2022) (to be submitted) <https:...>.
+Description: Supports the assessment of functional enrichment analyses obtained for several lists of genes and provides a workflow to analyze them between two species via weighted graphs. Methods are described in Sosa et al. (2022) (to be submitted).
 URL: https://github.com/ccsosa/GOCompare
 BugReports: https://github.com/ccsosa/GOCompare/issues
 Depends:

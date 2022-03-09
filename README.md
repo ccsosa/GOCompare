@@ -1,4 +1,4 @@
-# GOCompare R package v1.0.0
+# GOCompare R package v1.0.1
 
 ## Description
 

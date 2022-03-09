@@ -289,9 +289,16 @@ graph_two_GOspecies <-
                                           x_feat <- unique(x$feature)
 
                                           x_i <- lapply(seq_len(length(x_feat)),function(j){
+                                            message(j)
+                                            if(length(x$GO[which(x$feature==x_feat[[j]])])>1){
                                             x <- data.frame(t(combn(x$GO[which(x$feature==x_feat[[j]])], 2)),
                                                             feat =x_feat[[j]],
                                                             species = unique_sp[[i]])
+                                            } else {
+                                              x <- data.frame(t(combn(rep(x$GO[which(x$feature==x_feat[[j]])],2), 2)),
+                                                              feat =x_feat[[j]],
+                                                              species = unique_sp[[i]])
+                                            }
                                             return(x)})
                                           x_i <- do.call(rbind,x_i)
                                           colnames(x_i) <- c("SOURCE", "TARGET","FEATURE", "SP")

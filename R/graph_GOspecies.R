@@ -139,7 +139,7 @@ graphGOspecies <- function(df, GOterm_field, option = "Categories", numCores=2,s
                                    x <-res[res$SOURCE %in%  trimws(GO_list[[i]]) | res$TARGET %in%  trimws(GO_list[[i]]),]
 
                                    x <- data.frame(GO = trimws(GO_list[[i]]),
-                                                   GO_WEIGHT = sum(x$WEIGHT)
+                                                   GO_WEIGHT = sum(x$WEIGHT,na.rm = T)
 
                                    )
 
@@ -218,7 +218,27 @@ graphGOspecies <- function(df, GOterm_field, option = "Categories", numCores=2,s
                               list(df$feature),function(i){length(unique(i))})
     colnames(x_att) <- c("feature","GO_count")
 
+    ##extract node weights based on edge weights
+    #Extracting node weights
 
+    cl <- parallel::makeCluster(numCores)
+    parallel::clusterExport(cl, varlist=c("features_list","res"),envir=environment())
+    x_att2 <- parallel::parLapplyLB(cl,
+                                   X = seq_len(length(features_list)),
+                                   fun = function (i){
+                                     x <-res[res$SOURCE %in%  trimws(features_list[[i]]) | res$TARGET %in%  trimws(features_list[[i]]),]
+
+                                     x <- data.frame(feature  = trimws(features_list[[i]]),
+                                                     WEIGHT=sum(x$WEIGHT,na.rm = T)
+
+                                     )
+
+                                   })
+    parallel::stopCluster(cl)
+
+    x_att2 <- do.call(rbind,x_att2)
+    x_att <- merge(x_att,x_att2,by = "feature",all.y = T)
+    rm(x_att2)
     #Saving in a list object
     message("Saving results in a list object")
     res <- list(nodes=x_att,edges=res)
