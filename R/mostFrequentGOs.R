@@ -19,6 +19,9 @@
 #' @export
 
 mostFrequentGOs <- function(df, GOterm_field) {
+
+   df <- df[,c("feature",GOterm_field)]
+
    features_list <- unique(df[, "feature"])
    GO_list <- unique(df[, GOterm_field])
    x_freq <- lapply(seq_len(length(GO_list)), function(i) {

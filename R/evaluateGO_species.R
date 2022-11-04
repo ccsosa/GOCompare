@@ -48,6 +48,9 @@
 evaluateGO_species <-
   function(df1, df2, species1, species2, GOterm_field,test="prop") {
 
+    df1 <- df1[,c("feature",GOterm_field)]
+    df2 <- df2[,c("feature",GOterm_field)]
+
 
     if (!test %in% c("prop","chi-squared")) {
       stop("Incorrect test option chosen, please use 'prop' or 'chi-squared'")

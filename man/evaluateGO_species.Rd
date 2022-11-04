@@ -5,7 +5,7 @@
 \title{Comprehensive comparison between species using GO terms and Pearson's
  Chi-squared Tests}
 \usage{
-evaluateGO_species(df1, df2, species1, species2, GOterm_field)
+evaluateGO_species(df1, df2, species1, species2, GOterm_field, test = "prop")
 }
 \arguments{
 \item{df1}{A data frame with the results of a functional enrichment analysis
@@ -21,6 +21,9 @@ the features to be compared}
 
 \item{GOterm_field}{This is a string with the column name of the GO terms
 (e.g; "Functional_Category")}
+
+\item{test}{This is a string with the hypothesis test to be performed. Two options are provided,
+"prop" and "chi-squared" (default value="prop")}
 }
 \value{
 This function will return a data.frame with the following fields:
@@ -32,7 +35,7 @@ FDR \tab Multiple comparison correction for the p-value column \cr
 }
 \description{
 evaluateGO_species provides a simple function  to compare results
- of functional enrichment analysis for two species through the use of Pearson's
+ of functional enrichment analysis for two species through the use of proportion tests or Pearson's
  Chi-squared Tests and a False discovery rate correction
 }
 \examples{
@@ -47,9 +50,10 @@ species1 <- "H. sapiens"
 species2 <- "A. thaliana"
 #Running function
 x <- evaluateGO_species(df1= H_sapiens,
-                       df2=A_thaliana,
-                       species1=species1,
-                       species2=species2,
-                       GOterm_field=GOterm_field)
+                        df2=A_thaliana,
+                        species1=species1,
+                        species2=species2,
+                        GOterm_field=GOterm_field,
+                        test="prop")
 print(x)
 }

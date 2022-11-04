@@ -5,7 +5,14 @@
 \title{Visual representation for the results of functional
  enrichment analysis to compare two species and a series of categories}
 \usage{
-compareGOspecies(df1, df2, GOterm_field, species1, species2)
+compareGOspecies(
+  df1,
+  df2,
+  GOterm_field,
+  species1,
+  species2,
+  paired_lists = TRUE
+)
 }
 \arguments{
 \item{df1}{A data frame with the results of a functional enrichment analysis for the species 1
@@ -19,6 +26,10 @@ with an extra column "feature" with the features to be compared}
 \item{species1}{This is a string with the species name for species 1 (e.g; "H. sapiens")}
 
 \item{species2}{This is a string with the species name for species 2 (e.g; "A. thaliana")}
+
+\item{paired_lists}{This is a boolean to indicate if both species have same comparable categories (gene lists).
+If the paired_lists is FALSE the counts will be done only for species and categories will be kept in
+the outcomes. Please use carefully when paired_lists = FALSE.}
 }
 \value{
 This function will return a list with four slots: graphics, distance shared_GO_list, and unique_GO_list
@@ -52,7 +63,8 @@ x <- compareGOspecies(df1=H_sapiens_compress,
                       df2=A_thaliana_compress,
                       GOterm_field=GOterm_field,
                       species1=species1,
-                      species2=species2)
+                      species2=species2,
+                      paired_lists=TRUE)
 
 \dontrun{
 #Displaying PCoA results

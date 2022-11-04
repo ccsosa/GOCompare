@@ -33,3 +33,11 @@ visual_test
 ^README.Rmd
 ^.*\.log$
 ^.Rhistory$
+^configure.win$
+^dotest
+^src/autodep$
+^.Rbuildignore*
+^man/README$
+^man-roxygen
+^docs
+^util

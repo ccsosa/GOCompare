@@ -2,25 +2,39 @@
 #'  enrichment analysis to compare two species and a series of categories
 #' @name graph_two_GOspecies
 #' @description graph_two_GOspecies is a function to create undirected graphs
-#'  to compare GO terms between two species using two options:
-#'  1.) Nodes are GO terms such as biological processes and the edges represent
-#'  features for a species since the method creates a graph per species
-#'  as well as shared GO terms between them.
-#'  Edge weights are calculated as the intersection where cat(U) n cat(V)
-#'  represents categories where the GO terms U and V are. nBP is the total number
-#'  of biological processes represented by the GO terms (1). Node weights are
-#'   calculated as the sum of all w(e) where the node is a participant (2)
-#'    in each species and a shared GO terms(k) graphs.
+#'  \loadmathjax
 #'
-#'  (Please be patient, it requires a long time to finish).
-#'  \deqn{w(e) = \frac{|cat(U) n cat(V)|}{|nBP|}}{%
-#'  w(e) = |cat(U) n cat(V)| / |nBP| (1)}
+#'  The graph_two_GOspecies is an analog of the graphGOspecies function, and it has the same options (" Categories " and " GO ").
+#'  Nevertheless, the way in which the edge and node weights are calculated is slightly different. Since two species are compared,
+#'  three possible graphs are available \({G}_1,\, {G}_2\), and \({G}_3 \). \({G}_1\), and \({G}_2 \)represent each of the species analyzed
+#'  and \({G}_3\) is a subgraph of \({G}_1,\, {G}_2\), which contains the GO terms or Categories co-ocurring between both species.
 #'
-#'  \deqn{K_w(U) =  \sum(\sum(w(U,V)k=,1,k))}{%
-#'  K_w(U) =  sum(sum(w(U,V),k=,1,k)) (2)}
+#'  Categories option:
+#'  (Weight): The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms shared between pairs of categories
+#'  and the weight of the nodes provides a measure of how a GO term is conserved between two species and a series of categories but it is biased
+#'  to categories.
+#'  \mjsdeqn{\hat{K}_w(u)=\sum_{v \epsilon V_1}^{}w(u,v) + \sum_{v \epsilon V_2}^{}w(u,v)} (5)
+#'
+#' (shared weight): The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms shared between pairs of categories that are only
+#'  shared between species. This node weight provides a measure of how a GO term is conserved between two species.
+#'  to categories.
+#'
+#'  \mjsdeqn{w(e) = \frac{\mid BP_{u} \cap BP_{v}\mid if \ shared \ between \ species }{\mid BP\mid}} (4)
+#'
+
+#'  \mjsdeqn{\hat{K}_w(u)=\sum_{v \epsilon V_1}^{}w(u,v) + \sum_{v \epsilon V_2}^{}w(u,v)} (5)
+#'
+#'  (combined weight): This node weight is a combination of  weight and shared weight. The the idea of this index is to find categories more relevant with a balance
+#'   of GO terms shared among gene lists (categories) and the two species analyzed. It varies from -1 (categories with GO terms found only in one species) to 1
+#'   (categories with GO terms shared widely between species and among other categories)
+#'
+#'  \mjsdeqn{\hat K_w(u)=\frac{\hat K_w(u)}{max(\hat K_w(u))}} (6)
+#'  \mjsdeqn{\hat K_ws(u)=\frac{\hat K_ws(u)}{max(\hat K_ws(u))}} (7)
+#'  \mjsdeqn{CK_w(u)= \hat K_w(u) + \hat K_ws(u) - 1 } (8)
 #'
 #'
-#'  2.) Nodes are features and edges are GO terms available in the set of graphs (k) which consist of each species graphs and a shared GO terms graph (k).
+#'  GO option:
+#'   Nodes are features and edges are GO terms available in the set of graphs (k) which consist of each species graphs and a shared GO terms graph (k).
 #'  Two edges weights are calculated. First, edges weights are calculated as number of BP in the feature in comparison with the total number of GO terms available (3).
 #'  Second, a shared weight is calculated for interactions shared between two species. Finally, node weights are calculated as the sum of all w(e) where the node is a participant (2) in each  species and a shared GO terms(k) graphs
 #'
@@ -42,6 +56,9 @@
 #' @param saveGraph logical, if \code{TRUE} the function will allow save the graph in graphml format
 #' @param outdir This parameter will allow save the graph file in a folder described here (e.g: "D:").This parameter only
 #'  works when saveGraph=TRUE
+#' @param filename The name of the graph filename to be saved in the outdir detailed by the user.This parameter only
+#' works when saveGraph=TRUE
+#'
 #' @examples
 #'
 #' GOterm_field <- "Functional_Category"
@@ -56,14 +73,15 @@
 #'           numCores=1,
 #'           saveGraph = FALSE,
 #'           option= "Categories",
-#'           outdir = NULL)
+#'           outdir = NULL,
+#'           filename= NULL)
 #'
 #' @return This function will return a list with two slots: edges and nodes. Edges represent an edge list and their weights and
-#'  nodes which represent the nodes and their respective weights (weights, shared)
+#'  nodes which represent the nodes and their respective weights (weights, shared,combined).
 #' @importFrom utils combn setTxtProgressBar txtProgressBar
 #' @importFrom parallel makeCluster parLapplyLB stopCluster detectCores
 #' @importFrom igraph graph_from_data_frame write.graph
-#'
+#' @import mathjaxr
 #' @export
 
 graph_two_GOspecies <-
@@ -74,7 +92,8 @@ graph_two_GOspecies <-
            saveGraph = FALSE,
            option = "Categories",
            numCores=2,
-           outdir = NULL) {
+           outdir = NULL,
+           filename = NULL) {
 
     x_det <- NULL
     x_det <- parallel::detectCores()
@@ -95,6 +114,14 @@ graph_two_GOspecies <-
     if (isFALSE(saveGraph) & !is.null(outdir)) {
       stop("Please select saveGraph=TRUE to save your graph")
     }
+
+
+    if (isTRUE(saveGraph) & !is.null(outdir) & is.null(filename)) {
+      message(paste("Your filename will be saved as GO_TWO_SP.graphml or CAT_TWO_SP.graphml
+            dependent of the option selected in the path:",outdir))
+      message("please provide a filename if you want to avoid this behavior")
+    }
+
 
     if (numCores > x_det) {
       stop("Number of cores exceed the maximum allowed by the machine, use a coherent number of cores such as four")
@@ -271,6 +298,9 @@ graph_two_GOspecies <-
       parallel::stopCluster(cl)
 
       x_att <- do.call(rbind,x_att)
+      x_att$COMBINED_WEIGHT <- ((x_att$GO_WEIGHT/max(x_att$GO_WEIGHT,na.rm = T))+
+                               (x_att$SHARED_WEIGHT/max(x_att$SHARED_WEIGHT,na.rm = T)))-1
+
 
       res <- list(nodes=x_att,edges=res)
 
@@ -349,24 +379,40 @@ graph_two_GOspecies <-
 
     if (isTRUE(saveGraph)) {
       if (isTRUE(option == "Categories")) {
-        x1 <- igraph::graph_from_data_frame(res$edges, directed = FALSE,vertices = res$nodes)
-        message(paste("saving ",paste0(outdir, "/", "CAT_TWO_SP.graphml")))
+        if(is.null(filename)){
 
-        igraph::write.graph(
-          x1,
-          file = paste0(outdir, "/", "CAT_TWO_SP.graphml"),
-          format = "graphml"
-        )
+          message(paste("saving ",paste0(outdir, "/", "CAT_TWO_SP.graphml")))
+          x1 <- igraph::graph_from_data_frame(res$edges, directed = FALSE,vertices =  res$nodes)
+          igraph::write.graph(x1,
+                              file = paste0(outdir, "/", "CAT_TWO_SP.graphml"),
+                              format = "graphml")
+        } else {
+
+          message(paste("saving ",paste0(outdir, "/",filename,".graphml")))
+          x1 <- igraph::graph_from_data_frame(res$edges, directed = FALSE,vertices =  res$nodes)
+          igraph::write.graph(x1,
+                              file = paste0(outdir, "/",filename,".graphml"),
+                              format = "graphml")
+
+        }
+
       } else if(isTRUE(option =="GO")){
+        if(is.null(filename)){
 
+          message(paste("saving ",paste0(outdir, "/", "GO_TWO_SP.graphml")))
+          x2 <- igraph::graph_from_data_frame(res$edges, directed = FALSE,vertices =  res$nodes)
+          igraph::write.graph(x2,
+                              file = paste0(outdir, "/", "GO_TWO_SP.graphml"),
+                              format = "graphml")
+        } else {
 
-        x2 <- igraph::graph_from_data_frame(res$edges, directed = FALSE,vertices = res$nodes)
-        message(paste("saving ",paste0(outdir, "/", "GO_TWO_SP.graphml")))
-        igraph::write.graph(
-          x2,
-          file = paste0(outdir, "/", "GO_TWO_SP.graphml"),
-          format = "graphml"
-        )
+          message(paste("saving ",paste0(outdir, "/",filename,".graphml")))
+          x2 <- igraph::graph_from_data_frame(res$edges, directed = FALSE,vertices =  res$nodes)
+          igraph::write.graph(x2,
+                              file = paste0(outdir, "/",filename,".graphml"),
+                              format = "graphml")
+
+        }
       }
     }
 
