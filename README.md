@@ -152,6 +152,9 @@ colnames(x_s2$result)[1] <- "feature"
 #preparing input for compare two species
 x_input <- GOCompare::compareGOspecies(x_s$result,x_s2$result,GOterm_field,species1 = "H. sapiens",species2 = "D. melanogaster",paired_lists = T)
 
+#try to test similarities using clustering
+
+plot(hclust(x_input$distance,method = "ward.D"))
 
 #Comparing species results
 
