@@ -1,4 +1,4 @@
-# GOCompare R package v1.0.1
+# GOCompare R package v1.0.2
 
 ## Description
 
@@ -93,13 +93,13 @@ tapply(x_s$result$feature,x_s$result$feature,length)
 
 #Running function to get graph of a list of features and GO terms
 
-x <- GOCompare::graphGOspecies(df=x_s$result,
-                    GOterm_field="term_name",
-                    option = "GO",
-                    numCores=6,
-                    saveGraph=FALSE,
-                    outdir = NULL)
-
+x <- graphGOspecies(df=x_s$result,
+                      GOterm_field=GOterm_field,
+                      option = "Categories",
+                      numCores=1,
+                      saveGraph=FALSE,
+                      outdir = NULL,
+                      filename=NULL)
 
 # visualize nodes 
 View(x$nodes)
