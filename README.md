@@ -26,7 +26,7 @@ This R package provides five functions to provide a simple workflow to compare r
 
 - Functions: `mostFrequentGOs. graphGOspecies, evaluateGO_species` are designed to provide analysis for one species.
 
-- Functions: `compareGOspecies graph_two_GOspecies ` allow compare two species GO terms list belonging to the features needed by the user.
+- Functions: `compareGOspecies graph_two_GOspecies evaluateCAT_species evaluateGO_species ` allow compare two species GO terms list belonging to the features needed by the user.
 
 - Finally, a set of four datasets for test are provided: `A_thaliana, A_thaliana_compress, H_sapiens, H_sapiens_compress, comparison_example`
 
