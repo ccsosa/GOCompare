@@ -176,7 +176,7 @@ x_CAT <- x_CAT[which(x_CAT$FDR<=0.05),]
 View(x_CAT)
 
 #evaluating if there are different in proportions of categories for GO terms
-x_GO <- GOCompare::evaluateGO_species(x_s$result,x_s2$result,species1  = "H. sapiens",species2 = "D. melanogaster,GOterm_field = "term_name",test = "prop")
+x_GO <- GOCompare::evaluateGO_species(x_s$result,x_s2$result,species1  = "H. sapiens",species2 = "D. melanogaster",GOterm_field = "term_name",test = "prop")
 x_GO <- x_GO[which(x_GO$FDR<=0.05),]
 #View Categories with FDR <0.05 (No significant results in proportions)
 View(x_GO)
