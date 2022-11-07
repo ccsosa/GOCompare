@@ -100,7 +100,6 @@
 #' @importFrom stats aggregate
 #' @importFrom stringr str_count
 #' @import mathjaxr
-#' @importFrom Rdpack reprompt
 #' @export
 
 graphGOspecies <- function(df, GOterm_field, option = "Categories", numCores=2,
@@ -336,7 +335,10 @@ graphGOspecies <- function(df, GOterm_field, option = "Categories", numCores=2,
 
       }
     }
+  } else {
+    message("Saving as edges and node lists")
   }
+
 
   return(res)
 }

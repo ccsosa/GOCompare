@@ -1,6 +1,5 @@
 ^GOCompare\.Rproj$
 ^\.Rproj\.user$
-^\.Rproj\.users$
 ^pkgdown$
 ^CRAN-RELEASE$
 visual_test
@@ -47,3 +46,5 @@ visual_test
 ^docs#
 ^util
 ^GOCompare\.pdf$
+^.gitignore$
+^.Rhistory$

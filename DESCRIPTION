@@ -22,7 +22,7 @@ Description: Supports the assessment of functional enrichment analyses obtained 
 URL: https://github.com/ccsosa/GOCompare
 BugReports: https://github.com/ccsosa/GOCompare/issues
 Depends:
-  R (>= 4.0.0),
+  R (>= 4.0.0)
 Imports:
   base (>= 3.5),
   utils (>= 3.5),
@@ -39,8 +39,7 @@ Imports:
   mathjaxr,
   Rdpack
 RdMacros:
-  mathjaxr,
-  Rdpack
+  mathjaxr
 License: GPL-3
 LazyData: true
 Encoding: UTF-8

@@ -121,7 +121,6 @@
 #' @importFrom parallel makeCluster parLapplyLB stopCluster detectCores
 #' @importFrom igraph graph_from_data_frame write.graph
 #' @import mathjaxr
-#' @importFrom Rdpack reprompt
 #' @export
 
 graph_two_GOspecies <-
@@ -468,6 +467,8 @@ graph_two_GOspecies <-
 
         }
       }
+    } else {
+      message("Saving as edges and nodes lists")
     }
 
     return(res)
