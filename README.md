@@ -136,11 +136,11 @@ View(perc_GO)
 
 
 ########################################################################################################
-#two species comparison assuming they are the same genes in M musculus
+#two species comparison assuming they are the same genes in Drosophila melanogaster
 
 GOterm_field <- "term_name"
 x_s2 <-  gprofiler2::gost(query = x_Hsap,
-                         organism = "mmusculus", ordered_query = FALSE,
+                         organism = "dmelanogaster", ordered_query = FALSE,
                          multi_query = FALSE, significant = TRUE, exclude_iea = FALSE,
                          measure_underrepresentation = FALSE, evcodes = FALSE,
                          user_threshold = 0.05, correction_method = "g_SCS",
@@ -150,23 +150,36 @@ x_s2 <-  gprofiler2::gost(query = x_Hsap,
 colnames(x_s2$result)[1] <- "feature"
 
 #preparing input for compare two species
-x_input <- GOCompare::compareGOspecies(x_s$result,x_s2$result,GOterm_field,species1 = "H. sapiens",species2 = "M. musculus",paired_lists = T)
+x_input <- GOCompare::compareGOspecies(x_s$result,x_s2$result,GOterm_field,species1 = "H. sapiens",species2 = "D. melanogaster",paired_lists = T)
 
 
 #Comparing species results
 
-comp_species_graph <- GOCompare::graph_two_GOspecies(x_input,species1  = "H. sapiens",species2 = "M. musculus",option = "Categories")
+comp_species_graph <- GOCompare::graph_two_GOspecies(x_input,species1  = "H. sapiens",species2 = "D. melanogaster",option = "Categories")
 
 #View nodes order by combined weight (RCD category has more frequent GO terms co-occurring)
 View(comp_species_graph$nodes[order(comp_species_graph$nodes$COMBINED_WEIGHT,decreasing = T),])
 
-comp_species_graph_GO <- GOCompare::graph_two_GOspecies(x_input,species1  = "H. sapiens",species2 = "M. musculus",option = "GO")
+comp_species_graph_GO <- GOCompare::graph_two_GOspecies(x_input,species1  = "H. sapiens",species2 = "D. melanogaster",option = "GO")
 #Get GO terms nodes with values greater than 95%
 perc_GO_two <- comp_species_graph_GO$nodes[which(comp_species_graph_GO$nodes$GO_WEIGHT > quantile(comp_species_graph_GO$nodes$GO_WEIGHT,probs = 0.95)),]
 
 # visualize GO terms nodes filtered and ordered (more frequent GO terms in both species and categories)
 
 View(perc_GO_two[order(perc_GO_two$GO_WEIGHT,decreasing = T),])
+
+
+#evaluating if there are different in proportions of GO terms for each category 
+x_CAT <- GOCompare::evaluateCAT_species(x_s$result,x_s2$result,species1  = "H. sapiens",species2 = "D. melanogaster",GOterm_field = "term_name",test = "prop")
+x_CAT <- x_CAT[which(x_CAT$FDR<=0.05),]
+#View Categories with FDR <0.05 (GIM)
+View(x_CAT)
+
+#evaluating if there are different in proportions of categories for GO terms
+x_GO <- GOCompare::evaluateGO_species(x_s$result,x_s2$result,species1  = "H. sapiens",species2 = "M. musculus",GOterm_field = "term_name",test = "prop")
+x_GO <- x_GO[which(x_GO$FDR<=0.05),]
+#View Categories with FDR <0.05 (No significant results in proportions)
+View(x_GO)
 
 
 ```
