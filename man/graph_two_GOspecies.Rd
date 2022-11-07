@@ -41,8 +41,47 @@ works when saveGraph=TRUE}
 works when saveGraph=TRUE}
 }
 \value{
-This function will return a list with two slots: edges and nodes. Edges represent an edge list and their weights and
- nodes which represent the nodes and their respective weights (weights, shared,combined).
+This function will return a list with two slots: edges and nodes.
+ (Categories):
+  Edges list columns:
+  \tabular{rr}{
+  Column \tab Description \cr
+  SOURCE and TARGET \tab The source and target categories (Nodes in the edge) \cr
+  GO_N \tab The number of GO terms between the categories \cr
+  WEIGHT \tab Edge weight \cr
+  GO \tab GO terms available for both nodes \cr
+  SP1 \tab Number of GO terms for the species 1 \cr
+  SP2 \tab Number of GO terms for the species 2 \cr
+  SHARED \tab Number of GO terms shared or co-ocurring between the categories \cr
+  SHARED_WEIGHT \tab Shared weight for the edge \cr
+  }
+
+  Node list columns:
+  \tabular{rr}{
+  Column \tab Description \cr
+  CAT\tab Category name \cr
+  CAT_WEIGHT  \tab Node weight \cr
+  SHARED_WEIGHT  \tab Shared weight for the node \cr
+  COMBINED_WEIGHT \tab Combined weight for the node \cr
+  }
+
+ (GO):
+
+  Edges list columns:
+  \tabular{rr}{
+  Column \tab Description \cr
+  SOURCE and TARGET \tab The source and target GO terms (Nodes in the edge) \cr
+  FEATURE \tab The number of Categories where both GO Terms were found \cr
+  SP \tab Species where the GO terms was found (Species 1, Species 2 or Shared) \cr
+  WEIGHT \tab Edge weight \cr
+  }
+  Node list columns:
+
+  \tabular{rr}{
+  Column \tab Description \cr
+  GO \tab GO term node name \cr
+  GO_WEIGHT \tab Node weight \cr
+  }
 }
 \description{
 graph_two_GOspecies is a function to create undirected graphs
@@ -54,38 +93,39 @@ graph_two_GOspecies is a function to create undirected graphs
  and \({G}_3\) is a subgraph of \({G}_1,\, {G}_2\), which contains the GO terms or Categories co-ocurring between both species.
 
  Categories option:
- (Weight): The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms shared between pairs of categories
+ (Weight): The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms co-occurring between pairs of categories
  and the weight of the nodes provides a measure of how a GO term is conserved between two species and a series of categories but it is biased
  to categories.
- \mjsdeqn{\hat{K}_w(u)=\sum_{v \epsilon V_1}^{}w(u,v) + \sum_{v \epsilon V_2}^{}w(u,v)} (5)
 
-(shared weight): The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms shared between pairs of categories that are only
- shared between species. This node weight provides a measure of how a GO term is conserved between two species.
- to categories.
+ \mjsdeqn{\widehat{K}_w(u)=\sum_{v \epsilon V_1}^{}w(u,v) + \sum_{v \epsilon V_2}^{}w(u,v)} (5)
 
- \mjsdeqn{w(e) = \frac{\mid BP_{u} \cap BP_{v}\mid if \ shared \ between \ species }{\mid BP\mid}} (4)
+(shared weight): The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms co-occurring between pairs of categories that are only
+ shared between species. This node weight  \({K}_s \) is computed from a shared weight of edges \({s}\), where \({N}1\) and \({N}2\) are the set of GO terms associated
+  with the edge \(e = (u,v) \) for species 1 and 2, respectively. Therefore the node shared weight \({K}_s(u)\)  is the sum of \({s}\).
 
- \mjsdeqn{\hat{K}_w(u)=\sum_{v \epsilon V_1}^{}w(u,v) + \sum_{v \epsilon V_2}^{}w(u,v)} (5)
 
- (combined weight): This node weight is a combination of  weight and shared weight. The the idea of this index is to find categories more relevant with a balance
-  of GO terms shared among gene lists (categories) and the two species analyzed. It varies from -1 (categories with GO terms found only in one species) to 1
-  (categories with GO terms shared widely between species and among other categories)
 
- \mjsdeqn{\hat K_w(u)=\frac{\hat K_w(u)}{max(\hat K_w(u))}} (6)
- \mjsdeqn{\hat K_ws(u)=\frac{\hat K_ws(u)}{max(\hat K_ws(u))}} (7)
- \mjsdeqn{CK_w(u)= \hat K_w(u) + \hat K_ws(u) - 1 } (8)
+ \mjsdeqn{s(e) = \frac{\mid {N1} \ n \ {N2} \mid}{\mid {N1} \bigcup {N2} \mid}} (6)
+
+ \mjsdeqn{{K}_s(u)=\sum_{v \epsilon (V_1  \bigcup V_2) }^{}{s(u,v)}} (7)
+
+
+ (combined weight): This node weight  \({K}_c(u)\) is a combination of the weight and the shared weight. The idea of this combined weight is
+  to find categories with more frequent GO terms co-ocurring in order to observe functional similarities between two species with a balance of GO terms co-occurring among
+   gene lists (categories) and the two species. This node weight varies from -1 (categories with GO terms found only in one species and few categories) to 1
+   (categories with GO terms shared widely between species and among other categories). the combined node weight \({K}_c\) is defined as the sum of the min-max normalized weights
+    \mjseqn{\widehat{K}_w} and \({K}_s\) minus 1.
+
+ \mjsdeqn{minmax(y)=\frac{y-min(y)}{max(y)-min(y)}} (8)
+ \mjsdeqn{{K}_c(u)= minmax(\widehat{K}_w(u)) + minmax({K}_s(u)) - 1 } (9)
 
 
  GO option:
-  Nodes are features and edges are GO terms available in the set of graphs (k) which consist of each species graphs and a shared GO terms graph (k).
- Two edges weights are calculated. First, edges weights are calculated as number of BP in the feature in comparison with the total number of GO terms available (3).
- Second, a shared weight is calculated for interactions shared between two species. Finally, node weights are calculated as the sum of all w(e) where the node is a participant (2) in each  species and a shared GO terms(k) graphs
+ Given there are three possible graphs are available \({G}_1,\, {G}_2\), and \({G}_3 \). \({G}_1\), and \({G}_2 \) represent each of the species analyzed
+ and \({G}_3\) is a subgraph of \({G}_1,\, {G}_2\), which contains the GO terms or Categories co-ocurring between both species. For this case, Nodes are GO terms and edges are
+ categories where a GO terms is co-ocurring. This weight is similar to the GO weight calculated for graphGOspecies function. it is calculated as the equation 5.
 
- \deqn{w(e) = \frac{|BP(U) n BP(V)|}{|nBP|}}{%
- w(e) = |BP(U) n BP(V)| / |nBP| (3)}
-
- \deqn{K_w(U) =  \sum(\sum(w(U,V)k=,1,k))}{%
- K_w(U) =  sum(sum(w(U,V),k=,1,k)) (4)}
+ \mjsdeqn{\widehat{K}_w(u)=\sum_{v \epsilon V_1}^{}w(u,v) + \sum_{v \epsilon V_2}^{}w(u,v)} (5)
 }
 \examples{
 

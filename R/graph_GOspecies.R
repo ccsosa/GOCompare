@@ -6,23 +6,23 @@
 #'
 #'  Categories option:
 #'
-#'   The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms shared between pairs of categories. More specifically,
-#'  Two categories \(u,v\epsilon {V} \) are connected by an edge \(e=(u,v)\).the edge weights w(e) are defined as the ratio of the number of GO terms shared
-#'  between two categories. Edge weights w(e) are defined as the ratio of the number of GO terms (e.g. biological processes) shared between two categories
-#'   \(BP_{u} \cap {BP_{v}} \) compared to the total number of biological processes available (Equation 1).
-#'  A node weight \({K}_w\ (u) \) is defined as the sum of the edge weights where the node u is a participant (Equation 2). Thus, the node weight represents how frequently
+#'  The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms co-occurring between pairs of categories. More specifically,
+#'  Two categories: \mjseqn{u,v \epsilon V } are connected by an edge \(e=(u,v)\).the edge weights w(e) are defined as the ratio of the number of GO terms co-occurring
+#'  between two categories. Edge weights w(e) are defined as the ratio of the number of GO terms (e.g. biological processes) co-occurring between two categories
+#'   \(BP_{u} \ n  BP_{v}\) compared to the total number of GO terms available.
+#'  A node weight \(K_{w}(u)\) is defined as the sum of the edge weights where the node u is a participant. Thus, the node weight represents how frequently
 #'   GO terms are reported and expressed in a biological phenomenon.
 #'
 #'  \mjsdeqn{w(e) = \frac{\mid BP_{u} n {BP_{v}}\mid}{\mid BP\mid}} (1)
 #'
-#'  \mjsdeqn{{K}_w = \sum_{{v} \epsilon {V}}{w(u,v)}} (2)
+#'  \mjsdeqn{K_{w} = \sum_{{v} \epsilon {V}}{w(u,v)}} (2)
 #'
 #'
 #'  GO option:
 #'
-#'   The nodes \(({V}')\) represent GO terms and the edges \(({E}')\) represent categories sharing pairs of GO terms. More specifically,
-#'  two GO terms \({u}',\,{v}'\epsilon {{V}'} \) are connected by an edge \({e}'=({u}',{v}')\). the edge weight \({w}'\ ({e}')\) corresponds to the number of categories sharing the GO terms \({u}'\) and \({v}'\),
-#'  compared with the total number of GO terms (Equation 3). A node weight \({K}'_w({u}')\)is defined (Equation 4),in this case the weight
+#'  The nodes \({V}'\) represent GO terms and the edges \({E}'\) represent categories where a pair of GO terms co-occur. More specifically,
+#'  two GO terms are connected by an edge \({e}'=({u},{v}')\). the edge weight \({w}'({e}')\) corresponds to the number of categories co-occurring
+#'   the GO terms \({u}'\) and \({v}'\),compared with the total number of GO terms (Equation 3). A node weight \({K}'_w({u}')\) is defined,in this case the weight
 #'  represents the importance of a GO term (more frequent co-occurring).(Please be patient, it requires a long time to finish).
 #'
 #'  \mjsdeqn{{w}'({e}')=\frac{\mid{Cu}'\cap  {Cv}'\mid}{\mid BP \mid}} (3)
@@ -41,8 +41,43 @@
 #' @param filename The name of the graph filename to be saved in the outdir detailed by the user.This parameter only
 #' works when saveGraph=TRUE
 #'
-#' @return This function will return a list with two slots: edges and nodes. Edges represents an edge list and their weights and
-#'  nodes which represents the nodes and their respective weights
+#' @return This function will return a list with two slots: edges and nodes.
+#'
+#'  (Categories):
+#'   Edges list columns:
+#'   \tabular{rr}{
+#'   Column \tab Description \cr
+#'   SOURCE and TARGET \tab The source and target categories (Nodes in the edge) \cr
+#'   FEATURES_N \tab The number of GO terms between the categories \cr
+#'   WEIGHT \tab Edge weight \cr
+#'   FEATURES \tab GO terms available for both nodes \cr
+#'   }
+#'
+#'   Node list columns:
+#'   \tabular{rr}{
+#'   Column \tab Description \cr
+#'   feature\tab Category name \cr
+#'   GO_count  \tab GO terms counts for the node \cr
+#'   WEIGHT  \tab Node weight \cr
+#'   }
+#'
+#'  (GO):
+#'
+#'   Edges list columns:
+#'   \tabular{rr}{
+#'   Column \tab Description \cr
+#'   SOURCE and TARGET \tab The source and target GO terms (Nodes in the edge) \cr
+#'   FEATURE \tab The number of Categories where both GO Terms were found \cr
+#'   WEIGHT \tab Edge weight \cr
+#'   }
+#'   Node list columns:
+#'
+#'   \tabular{rr}{
+#'   Column \tab Description \cr
+#'   GO \tab GO term node name \cr
+#'   GO_WEIGHT \tab Node weight \cr
+#'   }
+#'
 #' @examples
 #'
 #' #Loading example datasets
@@ -65,6 +100,7 @@
 #' @importFrom stats aggregate
 #' @importFrom stringr str_count
 #' @import mathjaxr
+#' @importFrom Rdpack reprompt
 #' @export
 
 graphGOspecies <- function(df, GOterm_field, option = "Categories", numCores=2,

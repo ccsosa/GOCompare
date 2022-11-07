@@ -1,10 +1,10 @@
 ^GOCompare\.Rproj$
 ^\.Rproj\.user$
+^\.Rproj\.users$
 ^pkgdown$
 ^CRAN-RELEASE$
 visual_test
 ^.*\.Rproj$
-^\.Rproj\.user$
 ^\.travis\.yml$
 ^/\.gitattributes$
 ^inst/web$
@@ -14,7 +14,10 @@ visual_test
 ^GOVERNANCE\.md$
 ^ISSUE_TEMPLATE\.md$
 ^CODE_OF_CONDUCT\.md$
+^desktop\.ini$
 ^NEWS$
+^\.github$
+^\.git$
 ^revdep$
 ^\.httr-oauth$
 ^codecov\.yml$
@@ -24,12 +27,14 @@ visual_test
 ^README\.md$
 ^README-.*\.png$
 ^logo\.png$
+^CRAN-RELEASE$
 ^appveyor\.yml$
 ^\.github$
 ^vignettes/profilings
 ^vignettes/profiling.Rmd$
 ^cran-comments\.md$
 ^LICENSE\.md$
+^vignettes/additional$
 ^README.Rmd
 ^.*\.log$
 ^.Rhistory$
@@ -39,5 +44,6 @@ visual_test
 ^.Rbuildignore*
 ^man/README$
 ^man-roxygen
-^docs
+^docs#
 ^util
+^GOCompare\.pdf$
