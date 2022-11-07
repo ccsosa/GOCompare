@@ -185,9 +185,9 @@ View(x_GO)
 ```
 
 ## Authors
-Main:Chrystian C. Sosa, Diana Carolina Clavijo-Buriticá, Mauricio Quimbaya
+Main:Chrystian C. Sosa, Diana Carolina Clavijo-Buriticá, Mauricio Quimbaya, Victor Hugo García-Merchán
 
-Other contributors: Maria Victoria Diaz, Camila Riccio Rengifo, Arlen James Mosquera, Andrés Álvarez
+Other contributors: Nicolas Lopéz-Rozo, Camila Riccio Rengifo, David Arango Londoño, Maria Victoria Diaz
 
 ## References
 
