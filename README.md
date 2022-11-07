@@ -191,8 +191,7 @@ Other contributors: Maria Victoria Diaz, Camila Riccio Rengifo, Arlen James Mosq
 
 ## References
 
-Clavijo-Buriticá, Sosa, C.C., Mosquera, A.J. Álvarez, A., Medina, J. Quimbaya, M.A. A systematic comparison of the molecular machinery associated with Cancer-Hallmarks between plants and humans reveals Arabidopsis thaliana as a useful model to understand specific carcinogenic events (to be submitted, Target journal: Plos Biology)
- 
+Sosa, Chrystian Camilo and Clavijo-Buriticá, Diana Carolina and García-Merchán, Victor Hugo and López-Rozo, Nicolas and Riccio-Rengifo, Camila and Diaz, Maria Victoria and Londoño, David Arango and Quimbaya, Mauricio Alberto, GOCompare: An R Package to Compare Functional Enrichment Analysis between Two Species. Available at SSRN: https://ssrn.com/abstract=4201186 or http://dx.doi.org/10.2139/ssrn.4201186 
  
 ## License
 GNU GENERAL PUBLIC LICENSE Version 3
