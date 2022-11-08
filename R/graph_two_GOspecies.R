@@ -6,19 +6,19 @@
 #'
 #'  The graph_two_GOspecies is an analog of the graphGOspecies function, and it has the same options (" Categories " and " GO ").
 #'  Nevertheless, the way in which the edge and node weights are calculated is slightly different. Since two species are compared,
-#'  three possible graphs are available \({G}_1,\, {G}_2\), and \({G}_3 \). \({G}_1\), and \({G}_2 \)represent each of the species analyzed
-#'  and \({G}_3\) is a subgraph of \({G}_1,\, {G}_2\), which contains the GO terms or Categories co-ocurring between both species.
+#'  three possible graphs are available \mjseqn{{G}_1,\, {G}_2}, and \mjseqn{{G}_3 }. \mjseqn{{G}_1}, and \mjseqn{{G}_2 } represent each of the species analyzed
+#'  and \mjseqn{{G}_3} is a subgraph of \mjseqn{{G}_1,\, {G}_2}, which contains the GO terms or Categories co-ocurring between both species.
 #'
 #'  Categories option:
-#'  (Weight): The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms co-occurring between pairs of categories
+#'  (Weight): The nodes \mjseqn{(V)} represent groups of gene lists (categories), and the edges \mjseqn{(E)} represent GO terms co-occurring between pairs of categories
 #'  and the weight of the nodes provides a measure of how a GO term is conserved between two species and a series of categories but it is biased
 #'  to categories.
 #'
 #'  \mjsdeqn{\widehat{K}_w(u)=\sum_{v \epsilon V_1}^{}w(u,v) + \sum_{v \epsilon V_2}^{}w(u,v)} (5)
 #'
-#' (shared weight): The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms co-occurring between pairs of categories that are only
-#'  shared between species. This node weight  \({K}_s \) is computed from a shared weight of edges \({s}\), where \({N}1\) and \({N}2\) are the set of GO terms associated
-#'   with the edge \(e = (u,v) \) for species 1 and 2, respectively. Therefore the node shared weight \({K}_s(u)\)  is the sum of \({s}\).
+#' (shared weight): The nodes \mjseqn{(V)} represent groups of gene lists (categories), and the edges \mjseqn{(E)} represent GO terms co-occurring between pairs of categories that are only
+#'  shared between species. This node weight  \mjseqn{{K}_s} is computed from a shared weight of edges \mjseqn{{s}}, where \mjseqn{{N}1} and \mjseqn{{N}2} are the set of GO terms associated
+#'   with the edge \mjseqn{e = (u,v) } for species 1 and 2, respectively. Therefore the node shared weight \mjseqn{{K}_s(u)}  is the sum of \mjseqn{{s}}.
 #'
 #'
 #'
@@ -27,19 +27,19 @@
 #'  \mjsdeqn{{K}_s(u)=\sum_{v \epsilon (V_1  \bigcup V_2) }^{}{s(u,v)}} (7)
 #'
 #'
-#'  (combined weight): This node weight  \({K}_c(u)\) is a combination of the weight and the shared weight. The idea of this combined weight is
+#'  (combined weight): This node weight  \mjseqn{{K}_c(u)} is a combination of the weight and the shared weight. The idea of this combined weight is
 #'   to find categories with more frequent GO terms co-ocurring in order to observe functional similarities between two species with a balance of GO terms co-occurring among
 #'    gene lists (categories) and the two species. This node weight varies from -1 (categories with GO terms found only in one species and few categories) to 1
-#'    (categories with GO terms shared widely between species and among other categories). the combined node weight \({K}_c\) is defined as the sum of the min-max normalized weights
-#'     \mjseqn{\widehat{K}_w} and \({K}_s\) minus 1.
+#'    (categories with GO terms shared widely between species and among other categories). the combined node weight \mjseqn{{K}_c} is defined as the sum of the min-max normalized weights
+#'     \mjseqn{\widehat{K}_w} and \mjseqn{{K}_s} minus 1.
 #'
 #'  \mjsdeqn{minmax(y)=\frac{y-min(y)}{max(y)-min(y)}} (8)
 #'  \mjsdeqn{{K}_c(u)= minmax(\widehat{K}_w(u)) + minmax({K}_s(u)) - 1 } (9)
 #'
 #'
 #'  GO option:
-#'  Given there are three possible graphs are available \({G}_1,\, {G}_2\), and \({G}_3 \). \({G}_1\), and \({G}_2 \) represent each of the species analyzed
-#'  and \({G}_3\) is a subgraph of \({G}_1,\, {G}_2\), which contains the GO terms or Categories co-ocurring between both species. For this case, Nodes are GO terms and edges are
+#'  Given there are three possible graphs are available \mjseqn{{G}_1,\, {G}_2}, and \mjseqn{{G}_3}.  \mjseqn{{G}_1}, and \mjseqn{{G}_2} represent each of the species analyzed
+#'  and \mjseqn{{G}_3} is a subgraph of \mjseqn{{G}_1,\, {G}_2}, which contains the GO terms or Categories co-ocurring between both species. For this case, Nodes are GO terms and edges are
 #'  categories where a GO terms is co-ocurring. This weight is similar to the GO weight calculated for graphGOspecies function. it is calculated as the equation 5.
 #'
 #'  \mjsdeqn{\widehat{K}_w(u)=\sum_{v \epsilon V_1}^{}w(u,v) + \sum_{v \epsilon V_2}^{}w(u,v)} (5)

@@ -1,9 +1,8 @@
-^GOCompare\.Rproj$
-^\.Rproj\.user$
+^GOCompare.Rproj$
+^\.Rproj.user$
 ^pkgdown$
 ^CRAN-RELEASE$
 visual_test
-^.*\.Rproj$
 ^\.travis\.yml$
 ^/\.gitattributes$
 ^inst/web$
@@ -28,7 +27,6 @@ visual_test
 ^logo\.png$
 ^CRAN-RELEASE$
 ^appveyor\.yml$
-^\.github$
 ^vignettes/profilings
 ^vignettes/profiling.Rmd$
 ^cran-comments\.md$
@@ -45,6 +43,9 @@ visual_test
 ^man-roxygen
 ^docs#
 ^util
-^GOCompare\.pdf$
 ^.gitignore$
-^.Rhistory$
+^staging
+.*\.log$
+^cran-check.log$
+^.*\.Rproj$
+^\.Rproj\.user$

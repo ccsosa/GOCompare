@@ -6,11 +6,11 @@
 #'
 #'  Categories option:
 #'
-#'  The nodes (V) represent groups of gene lists (categories), and the edges (E) represent GO terms co-occurring between pairs of categories. More specifically,
-#'  Two categories: \mjseqn{u,v \epsilon V } are connected by an edge \(e=(u,v)\).the edge weights w(e) are defined as the ratio of the number of GO terms co-occurring
+#'  The nodes \mjseqn{(V)} represent groups of gene lists (categories), and the edges \mjseqn{(E)} represent GO terms co-occurring between pairs of categories. More specifically,
+#'  Two categories: \mjseqn{u,v \epsilon V } are connected by an edge \mjseqn{e=(u,v)}.the edge weights \mjseqn{w(e)} are defined as the ratio of the number of GO terms co-occurring
 #'  between two categories. Edge weights w(e) are defined as the ratio of the number of GO terms (e.g. biological processes) co-occurring between two categories
-#'   \(BP_{u} \ n  BP_{v}\) compared to the total number of GO terms available.
-#'  A node weight \(K_{w}(u)\) is defined as the sum of the edge weights where the node u is a participant. Thus, the node weight represents how frequently
+#'   \mjseqn{BP_{u} \ n  BP_{v}} compared to the total number of GO terms available.
+#'  A node weight \mjseqn{K_{w}(u)} is defined as the sum of the edge weights where the node u is a participant. Thus, the node weight represents how frequently
 #'   GO terms are reported and expressed in a biological phenomenon.
 #'
 #'  \mjsdeqn{w(e) = \frac{\mid BP_{u} n {BP_{v}}\mid}{\mid BP\mid}} (1)
@@ -20,9 +20,9 @@
 #'
 #'  GO option:
 #'
-#'  The nodes \({V}'\) represent GO terms and the edges \({E}'\) represent categories where a pair of GO terms co-occur. More specifically,
-#'  two GO terms are connected by an edge \({e}'=({u},{v}')\). the edge weight \({w}'({e}')\) corresponds to the number of categories co-occurring
-#'   the GO terms \({u}'\) and \({v}'\),compared with the total number of GO terms (Equation 3). A node weight \({K}'_w({u}')\) is defined,in this case the weight
+#'  The nodes \mjseqn{{V}} represent GO terms and the edges \mjseqn{{E}'} represent categories where a pair of GO terms co-occur. More specifically,
+#'  two GO terms are connected by an edge \mjseqn{{e}'=({u},{v}')}. the edge weight \mjseqn{{w}'({e}')} corresponds to the number of categories co-occurring
+#'   the GO terms \mjseqn{{u}} and \mjseqn{{v}'},compared with the total number of GO terms (Equation 3). A node weight \mjseqn{{K}'_w({u}')} is defined,in this case the weight
 #'  represents the importance of a GO term (more frequent co-occurring).(Please be patient, it requires a long time to finish).
 #'
 #'  \mjsdeqn{{w}'({e}')=\frac{\mid{Cu}'\cap  {Cv}'\mid}{\mid BP \mid}} (3)

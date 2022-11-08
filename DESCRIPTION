@@ -37,14 +37,12 @@ Imports:
   parallel,
   stringr,
   mathjaxr,
-  Rdpack
 RdMacros:
   mathjaxr
-License: GPL-3
+License: GPL (>= 3)
 LazyData: true
 Encoding: UTF-8
 RoxygenNote: 7.2.1
 Suggests: 
   testthat (>= 3.0.0)
 Config/testthat/edition: 3
-
