@@ -60,7 +60,7 @@ Response to external biotic stimulus  | DCE
 An example of how to use this package is provided below (We will compare cancer genes for 10 hallmarks associated to carcinogenesis process and their possible orthologues in D. melanogaster as an example. Please use an accurate program or platform to obtain orthologue genes. In this case we provide an example using the `gorth` function of gprofiler2 R package.
 
 ```r
-require(gprofiler2);require(stringr)
+require(gprofiler2);require(stringr);require(GOCompare)
 
 url_file = "https://raw.githubusercontent.com/ccsosa/R_Examples/master/Hallmarks_of_Cancer_AT.csv"
 x <- read.csv(url_file)
