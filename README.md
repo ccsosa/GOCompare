@@ -22,13 +22,13 @@ A full list of libraries needed for the package is included below.
 
 ## Usage
 
-This R package provides five functions to provide a simple workflow to compare results of functional enrichment analysis:
+This R package provides six functions to provide a simple workflow to compare results of functional enrichment analysis:
 
-- Functions: `mostFrequentGOs. graphGOspecies, evaluateGO_species` are designed to provide analysis for one species.
+- Functions: `mostFrequentGOs. graphGOspecies` are designed to provide analysis for one species.
 
-- Functions: `compareGOspecies graph_two_GOspecies evaluateCAT_species evaluateGO_species ` allow compare two species GO terms list belonging to the features needed by the user.
+- Functions: `compareGOspecies graph_two_GOspecies evaluateCAT_species evaluateGO_species ` allow compare two species GO terms list belonging to the categories needed by the user.
 
-- Finally, a set of four datasets for test are provided: `A_thaliana, A_thaliana_compress, H_sapiens, H_sapiens_compress, comparison_example`
+- Finally, a set of four datasets for test are provided in the package: `A_thaliana, A_thaliana_compress, H_sapiens, H_sapiens_compress, comparison_example`
 
 
 ### Data inputs
@@ -57,7 +57,7 @@ Response to external biotic stimulus  | DCE
 
 
 ### Workflow
-An example of how to use this package is provided below:
+An example of how to use this package is provided below (We will compare cancer genes for 10 hallmarks associated to carcinogenesis process and their possible orthologues in D. melanogaster as an example. To gain time in this example is assumed that same common names in human works in D. melanogaster (Please use an accurate program or platform to obtain orthologue genes):
 
 ```r
 
