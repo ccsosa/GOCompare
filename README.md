@@ -57,10 +57,9 @@ Response to external biotic stimulus  | DCE
 
 
 ### Workflow
-An example of how to use this package is provided below (We will compare cancer genes for 10 hallmarks associated to carcinogenesis process and their possible orthologues in D. melanogaster as an example. To gain time in this example is assumed that same common names in human works in D. melanogaster (Please use an accurate program or platform to obtain orthologue genes):
+An example of how to use this package is provided below (We will compare cancer genes for 10 hallmarks associated to carcinogenesis process and their possible orthologues in D. melanogaster as an example. Please use an accurate program or platform to obtain orthologue genes. In this case we provide an example using the `gorth` function of gprofiler2 R package.
 
 ```r
-
 require(gprofiler2);require(stringr)
 
 url_file = "https://raw.githubusercontent.com/ccsosa/R_Examples/master/Hallmarks_of_Cancer_AT.csv"
@@ -118,12 +117,12 @@ View(perc)
 #Running function to get graph of a list of GO terms  and categories
 
 x_GO <- graphGOspecies(df=x_s$result,
-                    GOterm_field=GOterm_field,
-                    option = "GO",
-                    numCores=1,
-                    saveGraph=FALSE,
-                    outdir = NULL,
-                    filename=NULL)
+                       GOterm_field=GOterm_field,
+                       option = "GO",
+                       numCores=1,
+                       saveGraph=FALSE,
+                       outdir = NULL,
+                       filename=NULL)
 
 # visualize nodes 
 View(x_GO$nodes)
@@ -138,14 +137,42 @@ View(perc_GO)
 ########################################################################################################
 #two species comparison assuming they are the same genes in Drosophila melanogaster
 
+
+orth_genes <- gprofiler2::gorth(query=unique(unlist(x_Hsap)),source_organism = "hsapiens",target_organism = "dmelanogaster")
+
+#assigning genes
+
+x_Dmap <- list()
+for(i in 1:length(x_Hsap)){
+  
+  D_list <- list()
+  for(j in 1:length(x_Hsap[[i]])){
+    x_orth <- orth_genes[orth_genes$input==x_Hsap[[i]][j],]
+    if(nrow(x_orth)>0){
+      D_list[[j]] <- data.frame(orth=x_orth$ortholog_name)
+    } else {
+      D_list[[j]] <- NULL
+    }
+    rm(x_orth)
+  };rm(j)
+
+  D_list <- unique(do.call(rbind,D_list))
+  D_list <- D_list[which(!is.null(D_list))]
+ x_Dmap[[i]] <- D_list
+ rm(D_list)
+};rm(i)
+
+names(x_Dmap) <- CH
+
+
 GOterm_field <- "term_name"
-x_s2 <-  gprofiler2::gost(query = x_Hsap,
-                         organism = "dmelanogaster", ordered_query = FALSE,
-                         multi_query = FALSE, significant = TRUE, exclude_iea = FALSE,
-                         measure_underrepresentation = FALSE, evcodes = FALSE,
-                         user_threshold = 0.05, correction_method = "g_SCS",
-                         domain_scope = "annotated", custom_bg = unique(unlist(x_Hsap)),
-                         numeric_ns = "", sources = "GO:BP", as_short_link = FALSE)
+x_s2 <-  gprofiler2::gost(query = x_Dmap,
+                          organism = "dmelanogaster", ordered_query = FALSE,
+                          multi_query = FALSE, significant = TRUE, exclude_iea = FALSE,
+                          measure_underrepresentation = FALSE, evcodes = FALSE,
+                          user_threshold = 0.05, correction_method = "g_SCS",
+                          domain_scope = "annotated", custom_bg = unique(unlist(x_Dmap)),
+                          numeric_ns = "", sources = "GO:BP", as_short_link = FALSE)
 
 colnames(x_s2$result)[1] <- "feature"
 
@@ -160,7 +187,7 @@ plot(hclust(x_input$distance,method = "ward.D"))
 
 comp_species_graph <- GOCompare::graph_two_GOspecies(x_input,species1  = "H. sapiens",species2 = "D. melanogaster",option = "Categories")
 
-#View nodes order by combined weight (RCD category has more frequent GO terms co-occurring)
+#View nodes order by combined weight (SPS and GIM categories have more frequent GO terms co-occurring)
 View(comp_species_graph$nodes[order(comp_species_graph$nodes$COMBINED_WEIGHT,decreasing = T),])
 
 comp_species_graph_GO <- GOCompare::graph_two_GOspecies(x_input,species1  = "H. sapiens",species2 = "D. melanogaster",option = "GO")
@@ -175,7 +202,8 @@ View(perc_GO_two[order(perc_GO_two$GO_WEIGHT,decreasing = T),])
 #evaluating if there are different in proportions of GO terms for each category 
 x_CAT <- GOCompare::evaluateCAT_species(x_s$result,x_s2$result,species1  = "H. sapiens",species2 = "D. melanogaster",GOterm_field = "term_name",test = "prop")
 x_CAT <- x_CAT[which(x_CAT$FDR<=0.05),]
-#View Categories with FDR <0.05 (GIM)
+#View Categories with FDR <0.05 (RCD,SPS,GIM, AIM,ERI,DCE)
+
 View(x_CAT)
 
 #evaluating if there are different in proportions of categories for GO terms
@@ -183,8 +211,6 @@ x_GO <- GOCompare::evaluateGO_species(x_s$result,x_s2$result,species1  = "H. sap
 x_GO <- x_GO[which(x_GO$FDR<=0.05),]
 #View Categories with FDR <0.05 (No significant results in proportions)
 View(x_GO)
-
-
 ```
 
 ## Authors
