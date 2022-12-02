@@ -1,8 +1,6 @@
 # GOCompare R package v1.0.2
 
-## Description
-The methods used here are described in 
-Sosa, Chrystian C., Diana Carolina Clavijo-Buriticá, Victor Hugo García-Merchán, Nicolas López-Rozo, Camila Riccio-Rengifo, Maria Victoria Diaz, David Arango Londoño, y Mauricio Alberto Quimbaya. «GOCompare: An R Package to Compare Functional Enrichment Analysis between Two Species». Genomics 115, n.º 1 (January 2023): 110528. https://doi.org/10.1016/j.ygeno.2022.110528.
+## Description:
 
 ## Installation
 GOCompare can be installed as follows
@@ -222,7 +220,7 @@ Other contributors: Nicolas Lopéz-Rozo, Camila Riccio Rengifo, David Arango Lon
 
 ## References
 
-Sosa, Chrystian Camilo and Clavijo-Buriticá, Diana Carolina and García-Merchán, Victor Hugo and López-Rozo, Nicolas and Riccio-Rengifo, Camila and Diaz, Maria Victoria and Londoño, David Arango and Quimbaya, Mauricio Alberto, GOCompare: An R Package to Compare Functional Enrichment Analysis between Two Species. Available at SSRN: https://ssrn.com/abstract=4201186 or http://dx.doi.org/10.2139/ssrn.4201186 
- 
+Sosa, Chrystian C., Diana Carolina Clavijo-Buriticá, Victor Hugo García-Merchán, Nicolas López-Rozo, Camila Riccio-Rengifo, Maria Victoria Diaz, David Arango Londoño, y Mauricio Alberto Quimbaya. «GOCompare: An R Package to Compare Functional Enrichment Analysis between Two Species». Genomics 115, n.º 1 (January 2023): 110528. https://doi.org/10.1016/j.ygeno.2022.110528.
+
 ## License
 GNU GENERAL PUBLIC LICENSE Version 3
