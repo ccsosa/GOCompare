@@ -1,6 +1,6 @@
 Package: GOCompare
 Title: Comprehensive GO Terms Comparison Between Species
-Version: 1.0.2
+Version: 1.0.2.1
 Authors@R: c(person("Chrystian Camilo", "Sosa",role = c("aut","cre","cph"), 
               comment = c(ORCID = "0000-0002-3734-3248"),
               email= "ccsosaa@javerianacali.edu.co"),
@@ -14,9 +14,13 @@ Authors@R: c(person("Chrystian Camilo", "Sosa",role = c("aut","cre","cph"),
               email = "camila.riccio@javerianacali.edu.co"),
 			 person("Nicolas", "López-Rozo",role = "ctb",
 			  email = "nicolaslopez@javerianacali.edu.co"),
-			 person("Victor Hugo", "García Merchán",role = "ctb",
-			  email = "victorhgarcia@uniquindio.edu.co"))
-Description: Supports the assessment of functional enrichment analyses obtained for several lists of genes and provides a workflow to analyze them between two species via weighted graphs. Methods are described in Sosa et al. (2022) (Submitted to Genomics).
+			 person("Victor Hugo", "García Merchán",role = c("aut","ctb"),
+			  email = "victorhgarcia@uniquindio.edu.co"),
+             person("Arlen", "James Mosquera",role = "ctb",
+              email = "arlen22@javerianacali.edu.co"),
+             person("Andrés", "Álvarez",role = "ctb",
+              email = "andresalvarez01@javerianacali.edu.co"))
+Description: Supports the assessment of functional enrichment analyses obtained for several lists of genes and provides a workflow to analyze them between two species via weighted graphs. Methods are described in Sosa et al. (2023) <doi:10.1016/j.ygeno.2022.110528>.
 URL: https://github.com/ccsosa/GOCompare
 BugReports: https://github.com/ccsosa/GOCompare/issues
 Depends:
@@ -40,7 +44,7 @@ RdMacros:
 License: GPL (>= 3)
 LazyData: true
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 Suggests: 
   testthat (>= 3.0.0)
 Config/testthat/edition: 3

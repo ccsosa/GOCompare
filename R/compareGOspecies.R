@@ -375,18 +375,26 @@ compareGOspecies <-
       row.names(unique_GO_list) <- NULL
     }
 
-    if(nrow(shared_GO_list)==1){
+    if(is.null(shared_GO_list)){
+      unique_GO_list <- NULL
+    } else if(nrow(shared_GO_list)==1){
       if(is.na(shared_GO_list$feature) & is.na(shared_GO_list$GO)){
         shared_GO_list <- NULL
         warning("NO SHARED GO TERMS!")
       }
+    } else {
+      shared_GO_list <- shared_GO_list
     }
 
-    if(nrow(unique_GO_list)==1){
+    if(is.null(unique_GO_list)){
+      unique_GO_list <- NULL
+    } else if(nrow(unique_GO_list)==1){
       if(is.na(unique_GO_list$feature) & is.na(unique_GO_list$GO)){
         unique_GO_list <- NULL
         warning("NO UNIQUE GO TERMS, ALL GO TERMS ARE SHARED!")
       }
+    } else {
+      unique_GO_list <- unique_GO_list
     }
     ov_plot_list <-
       list(

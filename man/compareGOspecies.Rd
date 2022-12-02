@@ -11,6 +11,7 @@ compareGOspecies(
   GOterm_field,
   species1,
   species2,
+  skipPCoA = FALSE,
   paired_lists = TRUE
 )
 }
@@ -26,6 +27,8 @@ with an extra column "feature" with the features to be compared}
 \item{species1}{This is a string with the species name for species 1 (e.g; "H. sapiens")}
 
 \item{species2}{This is a string with the species name for species 2 (e.g; "A. thaliana")}
+
+\item{skipPCoA}{This is a boolean to indicate if the PCoA graphics can be skipped}
 
 \item{paired_lists}{This is a boolean to indicate if both species have same comparable categories (gene lists).
 If the paired_lists is FALSE the counts will be done only for species and categories will be kept in
@@ -47,6 +50,9 @@ compareGOspecies function provides a simple workflow to compare results
   3.) A list of shared GO terms between species
   4.) Finally, a list of the unique GO terms and the belonging to the respective species.
 }
+\note{
+Do not use "-" in the feature column. This will lead to wrong results!
+}
 \examples{
 
 #Loading example datasets
@@ -64,6 +70,7 @@ x <- compareGOspecies(df1=H_sapiens_compress,
                       GOterm_field=GOterm_field,
                       species1=species1,
                       species2=species2,
+                      skipPCoA=FALSE,
                       paired_lists=TRUE)
 
 \dontrun{
