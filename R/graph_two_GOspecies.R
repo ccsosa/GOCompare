@@ -347,6 +347,10 @@ graph_two_GOspecies <-
       SHARED_WEIGHT_N <-  (x_att$SHARED_WEIGHT-min(x_att$SHARED_WEIGHT,na.rm = T))/
            (max(x_att$SHARED_WEIGHT,na.rm =T)-min(x_att$SHARED_WEIGHT,na.rm = T))
 
+      if(sum(is.na(SHARED_WEIGHT_N))==length(SHARED_WEIGHT_N)){
+        warning("No shared GO terms among categories, normalized values will be 0 for shared weight!")
+        SHARED_WEIGHT_N <- rep(0,length(SHARED_WEIGHT_N))
+      }
 
       x_att$COMBINED_WEIGHT <- (GO_WEIGHT_N + SHARED_WEIGHT_N) - 1
 

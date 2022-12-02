@@ -330,7 +330,7 @@ graphGOspecies <- function(df, GOterm_field, option = "Categories", numCores=2,
         message(paste("saving ",paste0(outdir, "/",filename,".graphml")))
 
         igraph::write.graph(x2,
-                            file = paste0(outdir, "/","filename",".graphml"),
+                            file = paste0(outdir, "/",filename,".graphml"),
                             format = "graphml")
 
       }

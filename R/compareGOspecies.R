@@ -14,6 +14,8 @@
 #'   3.) A list of shared GO terms between species
 #'   4.) Finally, a list of the unique GO terms and the belonging to the respective species.
 #'
+#' @note Do not use "-" in the feature column. This will lead to wrong results!
+#'
 #' @param df1 A data frame with the results of a functional enrichment analysis for the species 1
 #'  with an extra column "feature" with the features to be compared
 #' @param df2 A data frame with the results of a functional enrichment analysis for the species 2
@@ -21,6 +23,7 @@
 #' @param GOterm_field This is a string with the column name of the GO terms (e.g; "Functional_Category")
 #' @param species1 This is a string with the species name for species 1 (e.g; "H. sapiens")
 #' @param species2 This is a string with the species name for species 2 (e.g; "A. thaliana")
+#' @param skipPCoA This is a boolean to indicate if the PCoA graphics can be skipped
 #' @param paired_lists This is a boolean to indicate if both species have same comparable categories (gene lists).
 #'  If the paired_lists is FALSE the counts will be done only for species and categories will be kept in
 #'  the outcomes. Please use carefully when paired_lists = FALSE.
@@ -42,6 +45,7 @@
 #'                       GOterm_field=GOterm_field,
 #'                       species1=species1,
 #'                       species2=species2,
+#'                       skipPCoA=FALSE,
 #'                       paired_lists=TRUE)
 #'
 #' \dontrun{
@@ -65,6 +69,7 @@ compareGOspecies <-
            GOterm_field,
            species1,
            species2,
+           skipPCoA=FALSE,
            paired_lists=TRUE) {
     if (is.null(df1) | is.null(df2)) {
       stop("One input dataframe is absent, please add it and try again")
@@ -77,6 +82,9 @@ compareGOspecies <-
       stop("Same species name to compare, please fix")
     }
     if (is.null(paired_lists)) {
+      stop("Use FALSE or TRUE")
+    }
+    if (is.null(skipPCoA)) {
       stop("Use FALSE or TRUE")
     }
 
@@ -114,7 +122,7 @@ compareGOspecies <-
       })
 
     comb_all_feat <- do.call(rbind, comb_all_feat)
-    row.names(comb_all_feat)
+    #row.names(comb_all_feat)
     df1$species <- species1
     df2$species <- species2
     df_total <- rbind(df1, df2)
@@ -152,57 +160,73 @@ compareGOspecies <-
     jacc_dist <-
       vegan::vegdist(mat_for_dist, method = "jaccard", na.rm = TRUE)
 
-    vare.mds <- ape::pcoa(jacc_dist)
-    vare.mds2 <- as.data.frame(vare.mds$vectors[, 1:2])
-    vare.mds2$species <-
-      unlist(lapply(strsplit(row.names(vare.mds2), "-"), `[[`, 1))
-    vare.mds2$species <- trimws(vare.mds2$species)
+    if(sum(jacc_dist,na.rm = T)==0){
+      pC_flag <- FALSE
+      warning("No similarities found in the Jaccard distances. Jaccard distances matrix will be empty. Skipping PCoA")
+    } else {
+      pC_flag <- TRUE
+      message("Valid Jaccard distances calculated")
+    }
 
-    grp.a <-
-      vare.mds2[vare.mds2$species == species1,][chull(vare.mds2[vare.mds2$species ==
-                                                                  species1, c("Axis.1", "Axis.2")]),]  # hull values for grp A
-    grp.b <-
-      vare.mds2[vare.mds2$species == species2,][chull(vare.mds2[vare.mds2$species ==
-                                                                  species2, c("Axis.1", "Axis.2")]),]  # hull values for grp A
-    hull.data <- rbind(grp.a, grp.b)  #combine grp.a and grp.b
+    if(isTRUE(pC_flag)){
+      if(isFALSE(skipPCoA)){
+        vare.mds <- ape::pcoa(jacc_dist)
+        vare.mds2 <- as.data.frame(vare.mds$vectors[, 1:2])
+        vare.mds2$species <-
+          unlist(lapply(strsplit(row.names(vare.mds2), "-"), `[[`, 1))
+        vare.mds2$species <- trimws(vare.mds2$species)
 
-    species.scores <-
-      as.data.frame(vare.mds2)  #Using the scores function from vegan to extract the species scores and convert to a data.frame
-    species.scores$grp <-
-      unlist(lapply(strsplit(row.names(species.scores), "-"), `[[`, 2))
+        grp.a <-
+          vare.mds2[vare.mds2$species == species1,][chull(vare.mds2[vare.mds2$species ==
+                                                                      species1, c("Axis.1", "Axis.2")]),]  # hull values for grp A
+        grp.b <-
+          vare.mds2[vare.mds2$species == species2,][chull(vare.mds2[vare.mds2$species ==
+                                                                      species2, c("Axis.1", "Axis.2")]),]  # hull values for grp A
+        hull.data <- rbind(grp.a, grp.b)  #combine grp.a and grp.b
 
-    message("Calculating PCoA")
+        species.scores <-
+          as.data.frame(vare.mds2)  #Using the scores function from vegan to extract the species scores and convert to a data.frame
+        species.scores$grp <-
+          unlist(lapply(strsplit(row.names(species.scores), "-"), `[[`, 2))
 
-    ov_plot <-
-      ggplot2::ggplot() +
-      ggplot2::geom_polygon(
-        data = hull.data,
-        ggplot2::aes(
-          x = Axis.1,
-          y = Axis.2,
-          fill = species,
-          group = species
-        ),
-        alpha = 0.30
-      ) + # add the convex hulls
-      #scale_fill_manual(values=c(species1 = "green", species2= "blue")) +
-      ggplot2::geom_point(
-        data = vare.mds2,
-        ggplot2::aes(x = Axis.1, y = Axis.2, colour = species),
-        size = 8,
-        alpha = 0.5
-      ) + # add the point markers
-      ggrepel::geom_text_repel(
-        data = species.scores,
-        ggplot2::aes(x = Axis.1, y = Axis.2, label = grp),
-        alpha = 0.5,
-        size = 5,
-        show.legend = FALSE,
-        colour = 'black',
-        na.rm = TRUE
-        # force = 30, segment.colour = NA
-      )
+        message("Calculating PCoA")
 
+        ov_plot <-
+          ggplot2::ggplot() +
+          ggplot2::geom_polygon(
+            data = hull.data,
+            ggplot2::aes(
+              x = Axis.1,
+              y = Axis.2,
+              fill = species,
+              group = species
+            ),
+            alpha = 0.30
+          ) + # add the convex hulls
+          #scale_fill_manual(values=c(species1 = "green", species2= "blue")) +
+          ggplot2::geom_point(
+            data = vare.mds2,
+            ggplot2::aes(x = Axis.1, y = Axis.2, colour = species),
+            size = 8,
+            alpha = 0.5
+          ) + # add the point markers
+          ggrepel::geom_text_repel(
+            data = species.scores,
+            ggplot2::aes(x = Axis.1, y = Axis.2, label = grp),
+            alpha = 0.5,
+            size = 5,
+            show.legend = FALSE,
+            colour = 'black',
+            na.rm = TRUE
+            # force = 30, segment.colour = NA
+          )
+      } else {
+        message("Skipping PCoA")
+        ov_plot <- NULL
+      }
+    } else {
+      ov_plot <- NULL
+    }
     comb_feat_3 <- unique(comb_all_feat$feature)
 
     unique_GO_list <- list()
@@ -285,7 +309,7 @@ compareGOspecies <-
 
     } else {
 
-      message("Extracting shared and unique GO terms (Assuming same categories for both species")
+      message("Extracting shared and unique GO terms (Assuming same categories for both species)")
 
       pb <-
         utils::txtProgressBar(min = 0,
@@ -350,6 +374,20 @@ compareGOspecies <-
       row.names(shared_GO_list) <- NULL
       row.names(unique_GO_list) <- NULL
     }
+
+    if(nrow(shared_GO_list)==1){
+      if(is.na(shared_GO_list$feature) & is.na(shared_GO_list$GO)){
+        shared_GO_list <- NULL
+        warning("NO SHARED GO TERMS!")
+      }
+    }
+
+    if(nrow(unique_GO_list)==1){
+      if(is.na(unique_GO_list$feature) & is.na(unique_GO_list$GO)){
+        unique_GO_list <- NULL
+        warning("NO UNIQUE GO TERMS, ALL GO TERMS ARE SHARED!")
+      }
+    }
     ov_plot_list <-
       list(
         graphics = ov_plot,
@@ -357,6 +395,11 @@ compareGOspecies <-
         shared_GO_list = shared_GO_list,
         unique_GO_list = unique_GO_list
       )
+
+    if(is.null(ov_plot_list$graphics) & is.null(ov_plot_list$shared_GO_list) & is.null(ov_plot_list$unique_GO_list)){
+      warning("graph_two_GOspecies function will not be usable (No shared GO terms were found).
+              Please use evaluateCAT_species or evaluateGO_species instead!")
+    }
 
     return(ov_plot_list)
   }
