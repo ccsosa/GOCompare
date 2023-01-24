@@ -57,8 +57,8 @@ Response to external biotic stimulus  | DCE
 
 
 ### Workflow
-An example of how to use this package is provided below (We will compare cancer genes for 10 hallmarks associated to carcinogenesis process and their possible orthologues in D. melanogaster as an example. Please use an accurate program or platform to obtain orthologue genes. In this case we provide an example using the `gorth` function of gprofiler2 R package.
-
+- An example of how to use this package is provided below (We will compare cancer genes for 10 hallmarks associated to carcinogenesis process and their possible orthologues in D. melanogaster as an example. Please use an accurate program or platform to obtain orthologue genes. In this case we provide an example using the `gorth` function of gprofiler2 R package.
+- An alternative function to reduce redundant GO terms is provided here https://github.com/ccsosa/reducereduntGO/. The example here provided with the reducereduntGO.R is provided in the file https://github.com/ccsosa/reducereduntGO/blob/master/Cancer_hallmark_reduce_terms.R
 ```r
 require(gprofiler2);require(stringr);require(GOCompare)
 
