@@ -61,7 +61,7 @@ Response to external biotic stimulus  | DCE
 - An alternative function to reduce redundant GO terms is provided here https://github.com/ccsosa/reducereduntGO/. The example here provided with the reducereduntGO.R is provided in the file https://github.com/ccsosa/reducereduntGO/blob/master/Cancer_hallmark_reduce_terms.R
 - A plot function for the undirected graph for the GOCompare::graph_two_GOspecies categories option is available at https://github.com/ccsosa/Supplementary-information/blob/main/CHAPTER1/PLOT_TWO_SP_GRAPH_CAT.R
 - A plot function for the undirected graph for the GOCompare::graph_two_GOspecies GO option is available at https://github.com/ccsosa/Supplementary-information/blob/main/CHAPTER1/PLOT_TWO_SP_GRAPH_GO.R
-  (Please add a directory and the graph input from GOCompare, these functions will save pdf files named (CAT_TWO.pdf and GO_TWO.pdf).
+- (Please add a directory and the graph input from GOCompare, these functions will save pdf files named (CAT_TWO.pdf and GO_TWO.pdf respectively). Charge them using the source function and the URLs.
 
  ```r
 require(gprofiler2);require(stringr);require(GOCompare)
