@@ -61,7 +61,10 @@ Response to external biotic stimulus  | DCE
 - An alternative function to reduce redundant GO terms is provided here https://github.com/ccsosa/reducereduntGO/. The example here provided with the reducereduntGO.R is provided in the file https://github.com/ccsosa/reducereduntGO/blob/master/Cancer_hallmark_reduce_terms.R
 - A plot function for the undirected graph for the GOCompare::graph_two_GOspecies categories option is available at https://github.com/ccsosa/Supplementary-information/blob/main/CHAPTER1/PLOT_TWO_SP_GRAPH_CAT.R
 - A plot function for the undirected graph for the GOCompare::graph_two_GOspecies GO option is available at https://github.com/ccsosa/Supplementary-information/blob/main/CHAPTER1/PLOT_TWO_SP_GRAPH_GO.R
-- (Please add a directory and the graph input from GOCompare, these functions will save pdf files named (CAT_TWO.pdf and GO_TWO.pdf respectively). Charge them using the source function and the URLs.
+- (Please add a directory and the graph input from GOCompare, these functions will save pdf files named (CAT_TWO.pdf and GO_TWO.pdf respectively). Charge them using the source function and the URLs:
+ - source("https://raw.githubusercontent.com/ccsosa/Supplementary-information/main/CHAPTER1/PLOT_TWO_SP_GRAPH_CAT.R")
+ - source("https://raw.githubusercontent.com/ccsosa/Supplementary-information/main/CHAPTER1/PLOT_TWO_SP_GRAPH_GO.R")
+
 
  ```r
 require(gprofiler2);require(stringr);require(GOCompare)
@@ -215,6 +218,14 @@ x_GO <- GOCompare::evaluateGO_species(x_s$result,x_s2$result,species1  = "H. sap
 x_GO <- x_GO[which(x_GO$FDR<=0.05),]
 #View Categories with FDR <0.05 (No significant results in proportions)
 View(x_GO)
+
+
+##Optional plots (omit # symbol and run)
+#source("https://raw.githubusercontent.com/ccsosa/Supplementary-information/main/CHAPTER1/PLOT_TWO_SP_GRAPH_CAT.R")
+#source("https://raw.githubusercontent.com/ccsosa/Supplementary-information/main/CHAPTER1/PLOT_TWO_SP_GRAPH_GO.R")
+#plot_twosp_CAT("D:/",comp_species_graph)
+#plot_twosp_GO("D:/",comp_species_graph_GO)
+
 ```
 
 ## Authors
