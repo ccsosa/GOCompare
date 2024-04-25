@@ -30,6 +30,8 @@ This R package provides six functions to provide a simple workflow to compare re
 
 - Finally, a set of four datasets for test are provided in the package: `A_thaliana, A_thaliana_compress, H_sapiens, H_sapiens_compress, comparison_example`
 
+## Functions usage schema
+![Code schema](https://raw.githubusercontent.com/ccsosa/Supplementary-information/main/CHAPTER1/1-s2.0-S0888754322002737-gr1.jpg)
 
 ### Data inputs
 **Functional enrichment analyses results**
