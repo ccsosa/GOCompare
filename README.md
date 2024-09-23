@@ -64,9 +64,8 @@ Response to external biotic stimulus  | DCE
 - A plot function for the undirected graph for the GOCompare::graph_two_GOspecies categories option is available at https://github.com/ccsosa/Supplementary-information/blob/main/CHAPTER1/PLOT_TWO_SP_GRAPH_CAT.R
 - A plot function for the undirected graph for the GOCompare::graph_two_GOspecies GO option is available at https://github.com/ccsosa/Supplementary-information/blob/main/CHAPTER1/PLOT_TWO_SP_GRAPH_GO.R
 - (Please add a directory and the graph input from GOCompare, these functions will save pdf files named (CAT_TWO.pdf and GO_TWO.pdf respectively). Charge them using the source function and the URLs:
- - source("https://raw.githubusercontent.com/ccsosa/Supplementary-information/main/CHAPTER1/PLOT_TWO_SP_GRAPH_CAT.R")
- - source("https://raw.githubusercontent.com/ccsosa/Supplementary-information/main/CHAPTER1/PLOT_TWO_SP_GRAPH_GO.R")
-
+ - source(https://raw.githubusercontent.com/ccsosa/Supplementary-information/refs/heads/main/CHAPTER3/PLOT_TWO_SP_GRAPH_CAT.R)
+ - source(https://raw.githubusercontent.com/ccsosa/Supplementary-information/refs/heads/main/CHAPTER3/PLOT_TWO_SP_GRAPH_GO.R)
 
  ```r
 require(gprofiler2);require(stringr);require(GOCompare)
