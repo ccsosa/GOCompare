@@ -2,20 +2,45 @@
 % Please edit documentation in R/GOCompare-package.R
 \docType{package}
 \name{GOCompare-package}
-\alias{GOCompare-package}
 \alias{GOCompare}
-\title{GOCompare: An R package to compare GO terms of gene lists (categories)  and their orthologs}
+\alias{GOCompare-package}
+\title{GOCompare: An R package to compare GO terms of gene lists (categories) and their orthologs}
 \description{
-GOCompare is a an R package used to compare a GO terms list between
- two species
+GOCompare is an R package used to compare Gene Ontology (GO) term enrichment results between two species.
+It facilitates comparative functional genomics by allowing researchers to analyze similarities and differences
+in enriched GO categories between orthologous gene sets.
 }
 \details{
-\tabular{ll}{
-Package: \tab GOCompare\cr
-Type: \tab Package\cr
-Version: \tab 1.0.2.1\cr
-Date: \tab 2022-12-02\cr
-License: \tab GPL-3\cr
+Version: 1.0.2.1
+License: GPL-3
+Date: 2022-12-02
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/ccsosa/GOCompare}
+  \item Report bugs at \url{https://github.com/ccsosa/GOCompare/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Chrystian Camilo Sosa \email{ccsosaa@javerianacali.edu.co} (\href{https://orcid.org/0000-0002-3734-3248}{ORCID}) [copyright holder]
+
+Authors:
+\itemize{
+  \item Diana Carolina Clavijo-Buriticá \email{diana.clavijo@javerianacali.edu.co}
+  \item Mauricio Alberto Quimbaya \email{maquimbaya@javerianacali.edu.co}
+  \item Victor Hugo García Merchán \email{victorhgarcia@uniquindio.edu.co} [contributor]
+}
+
+Other contributors:
+\itemize{
+  \item Maria Victoria Diaz \email{m.v.diaz@cgiar.org} [contributor]
+  \item Camila Riccio Rengifo \email{camila.riccio@javerianacali.edu.co} [contributor]
+  \item Nicolas López-Rozo \email{nicolaslopez@javerianacali.edu.co} [contributor]
+  \item Arlen James Mosquera \email{arlen22@javerianacali.edu.co} [contributor]
+  \item Andrés Álvarez \email{andresalvarez01@javerianacali.edu.co} [contributor]
+}
+
 }
 \keyword{package}
